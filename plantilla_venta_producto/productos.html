@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Catálogo de Productos</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+
+  <style>
+    html, body {
+      height: 100%;
+      margin: 0;
+    }
+
+    body {
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* Navbar fija */
+    nav.navbar {
+      flex-shrink: 0;
+    }
+
+    /* Footer fijo */
+    footer {
+      flex-shrink: 0;
+    }
+
+    /* Contenedor del contenido que hace scroll */
+    #contenido-productos {
+      flex: 1 1 auto;
+      overflow-y: auto;
+      padding: 20px;
+    }
+
+    .card-img-top {
+      height: 180px;
+      object-fit: cover;
+    }
+
+    /* Asegura que se vea bien incluso con pocos productos */
+    .row.productos {
+      min-height: 400px;
+      overflow-y: auto;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Navbar -->
+  <nav class="navbar navbar-expand-lg navbar-dark bg-dark sticky-top">
+    <div class="container-fluid">
+      <a class="navbar-brand" href="index.html">Mi Empresa</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#menu">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="menu">
+        <ul class="navbar-nav ms-auto">
+          <li class="nav-item"><a class="nav-link" href="index.html">Inicio</a></li>
+          <li class="nav-item"><a class="nav-link active" href="productos.html">Productos</a></li>
+          <li class="nav-item"><a class="nav-link" href="cotizacion.html">Cotización</a></li>
+          <li class="nav-item"><a class="nav-link" href="#">Contacto</a></li>
+          <li class="nav-item"><a class="nav-link" href="#">Iniciar Sesión</a></li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+   <header class="bg-dark text-white text-center py-2">
+    <h4>Catálogo de Productos</h4>
+  </header>
+
+  <!-- Contenido con scroll -->
+  <div id="contenido-productos" class="container-fluid">
+
+    <!-- Filtros -->
+    <div class="container mb-4">
+      <div class="row g-2">
+        <div class="col-md-4">
+          <label for="categoria" class="form-label">Categoría</label>
+          <select class="form-select" id="categoria">
+            <option selected>Todos</option>
+            <option>Electrónica</option>
+            <option>Ropa</option>
+            <option>Hogar</option>
+            <option>Oficina</option>
+          </select>
+        </div>
+        <div class="col-md-4">
+          <label for="busqueda" class="form-label">Buscar producto</label>
+          <input type="text" class="form-control" id="busqueda" placeholder="Buscar...">
+        </div>
+        <div class="col-md-4 d-flex align-items-end">
+          <button class="btn btn-primary w-100">Buscar</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Cards de productos -->
+    <div class="container">
+      <div class="row productos g-4">
+        <!-- 20 cards de ejemplo -->
+        <!-- Puedes generar dinámicamente con JS o backend -->
+        <!-- Aquí dejo 6 de ejemplo, copia/pega hasta 20 -->
+        <!-- CARD -->
+        <div class="col-md-3">
+          <div class="card h-100">
+            <img src="https://picsum.photos/300/200?1" class="card-img-top" alt="Producto">
+            <div class="card-body">
+              <h5 class="card-title">Producto 1</h5>
+              <p class="card-text">Descripción breve del producto 1.</p>
+              <p><strong>Existencia:</strong> 25</p>
+              <p><strong>Precio:</strong> $45.00</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-md-3">
+          <div class="card h-100">
+            <img src="https://picsum.photos/300/200?1" class="card-img-top" alt="Producto">
+            <div class="card-body">
+              <h5 class="card-title">Producto 1</h5>
+              <p class="card-text">Descripción breve del producto 1.</p>
+              <p><strong>Existencia:</strong> 25</p>
+              <p><strong>Precio:</strong> $45.00</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-md-3">
+          <div class="card h-100">
+            <img src="https://picsum.photos/300/200?1" class="card-img-top" alt="Producto">
+            <div class="card-body">
+              <h5 class="card-title">Producto 1</h5>
+              <p class="card-text">Descripción breve del producto 1.</p>
+              <p><strong>Existencia:</strong> 25</p>
+              <p><strong>Precio:</strong> $45.00</p>
+            </div>
+          </div>
+        </div>
+
+
+        <div class="col-md-3">
+          <div class="card h-100">
+            <img src="https://picsum.photos/300/200?1" class="card-img-top" alt="Producto">
+            <div class="card-body">
+              <h5 class="card-title">Producto 1</h5>
+              <p class="card-text">Descripción breve del producto 1.</p>
+              <p><strong>Existencia:</strong> 25</p>
+              <p><strong>Precio:</strong> $45.00</p>
+            </div>
+          </div>
+        </div>
+
+
+        <div class="col-md-3">
+          <div class="card h-100">
+            <img src="https://picsum.photos/300/200?1" class="card-img-top" alt="Producto">
+            <div class="card-body">
+              <h5 class="card-title">Producto 1</h5>
+              <p class="card-text">Descripción breve del producto 1.</p>
+              <p><strong>Existencia:</strong> 25</p>
+              <p><strong>Precio:</strong> $45.00</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-md-3">
+          <div class="card h-100">
+            <img src="https://picsum.photos/300/200?1" class="card-img-top" alt="Producto">
+            <div class="card-body">
+              <h5 class="card-title">Producto 1</h5>
+              <p class="card-text">Descripción breve del producto 1.</p>
+              <p><strong>Existencia:</strong> 25</p>
+              <p><strong>Precio:</strong> $45.00</p>
+            </div>
+          </div>
+        </div>
+        <!-- Repite este bloque para 20 productos -->
+        <!-- ... -->
+      </div>
+    </div>
+
+    <!-- Paginación -->
+    <div class="container my-4">
+      <nav aria-label="Paginación de productos">
+        <ul class="pagination justify-content-center">
+          <li class="page-item disabled"><a class="page-link">Anterior</a></li>
+          <li class="page-item active"><a class="page-link" href="#">1</a></li>
+          <li class="page-item"><a class="page-link" href="#">2</a></li>
+          <li class="page-item"><a class="page-link" href="#">3</a></li>
+          <li class="page-item"><a class="page-link" href="#">Siguiente</a></li>
+        </ul>
+      </nav>
+    </div>
+
+  </div>
+
+  <!-- Footer fijo -->
+  <footer class="bg-dark text-white text-center py-3">
+    <p>&copy; 2025 Mi Empresa. Todos los derechos reservados.</p>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
