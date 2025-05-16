@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Admin Dashboard</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <style>
+    body {
+      min-height: 100vh;
+      margin: 0;
+      display: flex;
+      flex-direction: column;
+    }
+    #main-container {
+      display: flex;
+      flex: 1;
+    }
+    #sidebar {
+      width: 250px;
+      background: #343a40;
+      color: #fff;
+      flex-shrink: 0;
+    }
+    #sidebar .nav-link {
+      color: #adb5bd;
+    }
+    #sidebar .nav-link.active {
+      background: #495057;
+      color: #fff;
+    }
+    #content {
+      flex-grow: 1;
+      padding: 20px;
+    }
+    @media (max-width: 768px) {
+      #sidebar {
+        width: 100%;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Top Navbar -->
+  <nav class="navbar navbar-dark bg-dark d-md-none">
+    <div class="container-fluid">
+      <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasSidebar">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <span class="navbar-brand">Admin Panel</span>
+    </div>
+  </nav>
+
+  <!-- Offcanvas Sidebar for Mobile -->
+  <div class="offcanvas offcanvas-start d-md-none" tabindex="-1" id="offcanvasSidebar">
+    <div class="offcanvas-header">
+      <h5 class="offcanvas-title">Menú</h5>
+      <button type="button" class="btn-close" data-bs-dismiss="offcanvas"></button>
+    </div>
+    <div class="offcanvas-body p-0">
+      <ul class="nav nav-pills flex-column">
+        <li class="nav-item"><a href="#" class="nav-link active" id="link-personal">Registro Personal</a></li>
+        <li><a href="#" class="nav-link" id="link-usuarios">Registro Usuarios</a></li>
+        <li><a href="#" class="nav-link" id="link-productos">Registro Productos</a></li>
+        <li><a href="#" class="nav-link" id="link-compras">Compras</a></li>
+        <li><a href="#" class="nav-link" id="link-ventas">Ventas</a></li>
+        <li><a href="#" class="nav-link" id="link-balance">Balance</a></li>
+      </ul>
+    </div>
+  </div>
+
+  <div id="main-container" class="flex-grow-1">
+    <!-- Sidebar for Desktop -->
+    <nav id="sidebar" class="d-none d-md-block p-3">
+      <a href="#" class="d-flex align-items-center mb-3 text-white text-decoration-none">
+        <span class="fs-4">Admin Panel</span>
+      </a>
+      <hr />
+      <ul class="nav nav-pills flex-column mb-auto">
+        <li class="nav-item"><a href="#" class="nav-link active" id="link-personal">Registro Personal</a></li>
+        <li><a href="personal.html" class="nav-link" id="link-usuarios">Registro Usuarios</a></li>
+        <li><a href="usuarios.html" class="nav-link" id="link-productos">Registro Productos</a></li>
+        <li><a href="compras.html" class="nav-link" id="link-compras">Compras</a></li>
+        <li><a href="ventas.html" class="nav-link" id="link-ventas">Ventas</a></li>
+        <li><a href="balance.html" class="nav-link" id="link-balance">Balance</a></li>
+      </ul>
+    </nav>
+
+    <!-- Main Content -->
+    <div id="content" class="w-100">
+      <h2>Registro Personal</h2>
+      <p>Sección para agregar y gestionar personal.</p>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <script>
+    const links = document.querySelectorAll('.nav-link');
+    const content = document.getElementById('content');
+
+    function clearActive() {
+      links.forEach(link => link.classList.remove('active'));
+    }
+
+    const pages = {
+      "link-personal": "<h2>Registro Personal</h2><p>Formulario y tabla de personal aquí.</p>",
+      "link-usuarios": "<h2>Registro de Usuarios</h2><p>Formulario y tabla de usuarios aquí.</p>",
+      "link-productos": "<h2>Registro de Productos</h2><p>Formulario y tabla de productos aquí.</p>",
+      "link-compras": "<h2>Compras</h2><p>Registro y seguimiento de compras.</p>",
+      "link-ventas": "<h2>Ventas</h2><p>Registro y seguimiento de ventas.</p>",
+      "link-balance": "<h2>Balance</h2><p>Informe financiero y balances.</p>"
+    };
+
+    links.forEach(link => {
+      link.addEventListener('click', (e) => {
+        e.preventDefault();
+        clearActive();
+        link.classList.add('active');
+        content.innerHTML = pages[link.id] || "<h2>Sección no encontrada</h2>";
+        // Si es mobile, cierra el offcanvas
+        const offcanvasEl = document.querySelector('.offcanvas.show');
+        if (offcanvasEl) {
+          bootstrap.Offcanvas.getInstance(offcanvasEl).hide();
+        }
+      });
+    });
+  </script>
+</body>
+</html>
