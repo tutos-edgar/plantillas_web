@@ -2,128 +2,233 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Admin Dashboard</title>
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Panel de Administración</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <style>
-    body {
-      min-height: 100vh;
-      margin: 0;
-      display: flex;
-      flex-direction: column;
+    html, body {
+      height: 100%;
+      margin: 0; padding: 0;
+      overflow: hidden;
     }
-    #main-container {
-      display: flex;
-      flex: 1;
+    /* TOPBAR */
+    .topbar {
+      position: fixed;
+      top: 0; left: 0; right: 0; height: 56px;
+      background-color: #2e2828; color: #fff; z-index: 1050;
+      padding: 0 1rem; display: flex; align-items: center; justify-content: space-between;
     }
+    .topbar .btn, .topbar a { color: #fff !important; }
+    .topbar .dropdown-menu { background-color: #3a3a3a; }
+    .topbar .dropdown-item { color: #fff; }
+    .topbar .dropdown-item:hover { background-color: #4a4a4a; }
+
+    /* LAYOUT */
+    .layout {
+      display: flex; height: 100%; padding-top: 56px;
+    }
+
+    /* SIDEBAR */
     #sidebar {
-      width: 250px;
-      background: #343a40;
-      color: #fff;
-      flex-shrink: 0;
+      width: 250px; background-color: #2e2828; color: #fff;
+      transition: width .3s; overflow: hidden;
     }
+    #sidebar.collapsed { width: 80px; }
     #sidebar .nav-link {
-      color: #adb5bd;
+      color: #ddd; white-space: nowrap; position: relative;
+      transition: background .2s;
     }
-    #sidebar .nav-link.active {
-      background: #495057;
-      color: #fff;
+    /* Hover azul oscuro */
+    #sidebar .nav-link:hover,
+    #sidebar .submenu .nav-link:hover {
+      background-color: #5c5f64 !important;
+      color: #fff !important;
     }
-    #content {
-      flex-grow: 1;
-      padding: 20px;
+    #sidebar .nav-link i { width: 25px; text-align: center; }
+    /* oculta texto y submenús en colapsado */
+    #sidebar.collapsed .nav-link span,
+    #sidebar.collapsed .submenu {
+      display: none;
     }
-    @media (max-width: 768px) {
-      #sidebar {
-        width: 100%;
+
+    /* SUBMENÚ normal */
+    .submenu .nav-link { padding-left: 2.5rem; }
+
+    /* SUBMENÚ collapsed: solo iconos, abajo del padre */
+    #sidebar.collapsed .submenu.show {
+      display: block;
+      position: static;
+    }
+    #sidebar.collapsed .submenu.show .nav-link {
+      padding-left: .5rem;
+    }
+    #sidebar.collapsed .submenu.show .nav-link span {
+      display: none !important;
+    }
+
+    /* CONTENIDO */
+    .main-content {
+      flex-grow: 1; overflow: hidden; display: flex; flex-direction: column;
+    }
+    .content-scroll {
+      flex: 1; overflow-y: auto; padding: 1rem; background-color: #fff;
+    }
+
+    .btn-outline-light:hover {
+      background-color: #ffffff;  /* Cambia el fondo al pasar el mouse */
+      color: #000000;             /* Cambia el color del texto */
+      border-color: #ffffff;      /* Opcional: cambia el borde */
+    }
+
+    /* Cambia el color del ícono al pasar el mouse */
+    .btn-outline-light:hover i {
+      color: #000000;
+    }
+
+    /* OFFCANVAS MÓVIL */
+    @media (max-width: 767.98px) {
+      #sidebar { display: none; }
+      #sidebar.mobile-show {
+        display: block; position: absolute; z-index: 1045; width: 250px;
       }
     }
   </style>
 </head>
 <body>
-  <!-- Top Navbar -->
-  <nav class="navbar navbar-dark bg-dark d-md-none">
-    <div class="container-fluid">
-      <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasSidebar">
-        <span class="navbar-toggler-icon"></span>
-      </button>
-      <span class="navbar-brand">Admin Panel</span>
-    </div>
-  </nav>
 
-  <!-- Offcanvas Sidebar for Mobile -->
-  <div class="offcanvas offcanvas-start d-md-none" tabindex="-1" id="offcanvasSidebar">
+  <!-- TOPBAR -->
+  <div class="topbar">
+    <div class="d-flex align-items-center">
+      <!-- <h5 class="text-center">Menú</h5> -->
+      <button id="btnToggle" class="btn btn-outline-light me-2 d-none d-md-inline">
+        <i class="fa-solid fa-bars"></i>
+      </button>
+      <button class="btn btn-outline-light me-2 d-md-none" data-bs-toggle="offcanvas" data-bs-target="#sidebarOffcanvas">
+        <i class="fa-solid fa-bars"></i>
+      </button>
+      <h5 class="mb-0">   Bienvenido, Edgar Rolando</h5>
+    </div>
+    <div class="dropdown">
+      <a href="#" class="d-flex align-items-center text-decoration-none dropdown-toggle" id="dropdownUser" data-bs-toggle="dropdown">
+        <i class="fa-solid fa-user-circle me-1 fa-lg"></i>
+        <span class="d-none d-sm-inline">edgar</span>
+      </a>
+      <ul class="dropdown-menu dropdown-menu-end text-small shadow" aria-labelledby="dropdownUser">
+        <li><a class="dropdown-item" href="#">Perfil</a></li>
+        <li><a class="dropdown-item" href="#">Configuración</a></li>
+        <li><hr class="dropdown-divider"></li>
+        <li><a class="dropdown-item" href="#">Cerrar sesión</a></li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- LAYOUT -->
+  <div class="layout">
+    <!-- SIDEBAR -->
+    <nav id="sidebar" class="p-3">
+      <h5 class="text-center">Menú</h5>
+      <ul class="nav flex-column">
+        <li class="nav-item">
+          <a class="nav-link collapsed" data-bs-toggle="collapse" href="#submenu1" aria-expanded="false" >
+            <i class="fa-solid fa-user" data-bs-toggle="tooltip" title="Usuarios"></i> <span>Usuarios</span> <i class="fa-solid fa-caret-down float-end"></i>
+          </a>
+          <ul class="nav collapse submenu" id="submenu1">
+            <li class="nav-item"><a class="nav-link" href="#"><i class="fa-solid fa-user-plus" data-bs-toggle="tooltip" title="Registrar Usuario"></i> <span>Registrar</span></a></li>
+            <li class="nav-item"><a class="nav-link" href="#"><i class="fa-solid fa-users"></i> <span>Listar</span></a></li>
+          </ul>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#"><i class="fa-solid fa-file-circle-plus" data-bs-toggle="tooltip" title="Cotizacion"></i> <span>Agregar Cotización</span></a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#"><i class="fa-solid fa-file-invoice" data-bs-toggle="tooltip" title="Cotización"></i> <span>Ver Cotizaciones</span></a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#"><i class="fa-solid fa-calendar-check" data-bs-toggle="tooltip" title="Citas"></i> <span>Agendar Cita</span></a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#"><i class="fa-solid fa-envelope"></i> <span>Mensajes</span></a>
+        </li>
+      </ul>
+    </nav>
+
+    <!-- CONTENIDO -->
+    <div class="main-content">
+      <div class="content-scroll">
+        <h3>Panel de Administración</h3>
+        <p>Desplázate para ver todo el contenido.</p>
+        <ul>
+          <script>
+            for (let i = 1; i <= 100; i++) {
+              document.write(`<li>Elemento de prueba número ${i}</li>`);
+            }
+          </script>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- OFFCANVAS MÓVIL -->
+  <div class="offcanvas offcanvas-start" tabindex="-1" id="sidebarOffcanvas">
     <div class="offcanvas-header">
       <h5 class="offcanvas-title">Menú</h5>
       <button type="button" class="btn-close" data-bs-dismiss="offcanvas"></button>
     </div>
     <div class="offcanvas-body p-0">
-      <ul class="nav nav-pills flex-column">
-        <li class="nav-item"><a href="#" class="nav-link active" id="link-personal">Registro Personal</a></li>
-        <li><a href="#" class="nav-link" id="link-usuarios">Registro Usuarios</a></li>
-        <li><a href="#" class="nav-link" id="link-productos">Registro Productos</a></li>
-        <li><a href="#" class="nav-link" id="link-compras">Compras</a></li>
-        <li><a href="#" class="nav-link" id="link-ventas">Ventas</a></li>
-        <li><a href="#" class="nav-link" id="link-balance">Balance</a></li>
-      </ul>
-    </div>
-  </div>
-
-  <div id="main-container" class="flex-grow-1">
-    <!-- Sidebar for Desktop -->
-    <nav id="sidebar" class="d-none d-md-block p-3">
-      <a href="#" class="d-flex align-items-center mb-3 text-white text-decoration-none">
-        <span class="fs-4">Admin Panel</span>
-      </a>
-      <hr />
-      <ul class="nav nav-pills flex-column mb-auto">
-        <li class="nav-item"><a href="personal.html" class="nav-link active" id="link-personal">Registro Personal</a></li>
-        <li><a href="usuarios.html" class="nav-link" id="link-usuarios">Registro Usuarios</a></li>
-        <li><a href="productos.html" class="nav-link" id="link-productos">Registro Productos</a></li>
-        <li><a href="compras.html" class="nav-link" id="link-compras">Compras</a></li>
-        <li><a href="ventas.html" class="nav-link" id="link-ventas">Ventas</a></li>
-        <li><a href="balance.html" class="nav-link" id="link-balance">Balance</a></li>
-      </ul>
-    </nav>
-
-    <!-- Main Content -->
-    <div id="content" class="w-100">
-      <h2>Registro Personal</h2>
-      <p>Sección para agregar y gestionar personal.</p>
+      <nav class="mobile-show p-3">
+        <ul class="nav flex-column">
+          <!-- mismo contenido del sidebar -->
+          <li class="nav-item">
+            <a class="nav-link" data-bs-toggle="collapse" href="#submenuMobile1" aria-expanded="false">
+              <i class="fa-solid fa-user"></i> <span>Usuarios</span> <i class="fa-solid fa-caret-down float-end"></i>
+            </a>
+            <ul class="nav collapse submenu" id="submenuMobile1">
+              <li class="nav-item"><a class="nav-link" href="#"><i class="fa-solid fa-user-plus"></i> <span>Registrar</span></a></li>
+              <li class="nav-item"><a class="nav-link" href="#"><i class="fa-solid fa-users"></i> <span>Listar</span></a></li>
+            </ul>
+          </li>
+          <li class="nav-item"><a class="nav-link" href="#"><i class="fa-solid fa-file-circle-plus"></i> <span>Agregar Cotización</span></a></li>
+          <li class="nav-item"><a class="nav-link" href="#"><i class="fa-solid fa-file-invoice"></i> <span>Ver Cotizaciones</span></a></li>
+          <li class="nav-item"><a class="nav-link" href="#"><i class="fa-solid fa-calendar-check"></i> <span>Agendar Cita</span></a></li>
+          <li class="nav-item"><a class="nav-link" href="#"><i class="fa-solid fa-envelope"></i> <span>Mensajes</span></a></li>
+        </ul>
+      </nav>
     </div>
   </div>
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
   <script>
-    const links = document.querySelectorAll('.nav-link');
-    const content = document.getElementById('content');
+    const sidebar = document.getElementById('sidebar');
+    const btnToggle = document.getElementById('btnToggle');
 
-    function clearActive() {
-      links.forEach(link => link.classList.remove('active'));
-    }
-
-    const pages = {
-      "link-personal": "<h2>Registro Personal</h2><p>Formulario y tabla de personal aquí.</p>",
-      "link-usuarios": "<h2>Registro de Usuarios</h2><p>Formulario y tabla de usuarios aquí.</p>",
-      "link-productos": "<h2>Registro de Productos</h2><p>Formulario y tabla de productos aquí.</p>",
-      "link-compras": "<h2>Compras</h2><p>Registro y seguimiento de compras.</p>",
-      "link-ventas": "<h2>Ventas</h2><p>Registro y seguimiento de ventas.</p>",
-      "link-balance": "<h2>Balance</h2><p>Informe financiero y balances.</p>"
-    };
-
-    links.forEach(link => {
-      link.addEventListener('click', (e) => {
-        e.preventDefault();
-        clearActive();
-        link.classList.add('active');
-        content.innerHTML = pages[link.id] || "<h2>Sección no encontrada</h2>";
-        // Si es mobile, cierra el offcanvas
-        const offcanvasEl = document.querySelector('.offcanvas.show');
-        if (offcanvasEl) {
-          bootstrap.Offcanvas.getInstance(offcanvasEl).hide();
-        }
-      });
+    btnToggle.addEventListener('click', () => {
+      sidebar.classList.toggle('collapsed');
+      // cerramos todos los submenús
+      document.querySelectorAll('.submenu').forEach(el => el.classList.remove('show'));
+      document.querySelectorAll('.nav-link.collapsed').forEach(link => link.setAttribute('aria-expanded','false'));
     });
+
+    // Al hacer clic en un nav-link colapsado con submenu, solo expandimos submenú de íconos
+    document.querySelectorAll(".menu-link").forEach((link) => {
+    link.addEventListener("click", function (e) {
+        const sidebar = document.getElementById("sidebar");
+        const submenu = this.nextElementSibling;
+        const allSubmenus = document.querySelectorAll(".submenu");
+
+        // Oculta otros submenús
+        allSubmenus.forEach((sm) => {
+            if (sm !== submenu) {
+                sm.classList.remove("show");
+            }
+        });
+
+        // Alterna el submenú actual
+        submenu.classList.toggle("show");
+    });
+});
+
+
   </script>
 </body>
 </html>
