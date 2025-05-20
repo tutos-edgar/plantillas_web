@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Asignar Precios</title>
+  <!-- Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <!-- FontAwesome -->
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css" rel="stylesheet">
+  <!-- SweetAlert2 -->
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+</head>
+<body>
+<div class="container py-4">
+  <div class="d-flex justify-content-between align-items-center mb-3">
+    <h1 class="h3">Productos y Precios</h1>
+  </div>
+
+  <div class="table-responsive">
+    <table class="table table-bordered" id="tablaPrecios">
+      <thead class="table-light">
+        <tr>
+          <th>Código</th>
+          <th>Nombre</th>
+          <th>Sección</th>
+          <th>Proveedor</th>
+          <th>Descripción</th>
+          <th>Precio</th>
+          <th>Acciones</th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+  </div>
+</div>
+
+<!-- Modal para asignar precio -->
+<div class="modal fade" id="precioModal" tabindex="-1" aria-labelledby="precioModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="precioModalLabel">Asignar Precio</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body">
+        <form id="formPrecio">
+          <input type="hidden" id="indexPrecio" value="-1">
+          <div class="mb-3">
+            <label class="form-label">Código</label>
+            <input type="text" class="form-control" id="pcodigo" readonly>
+          </div>
+          <div class="mb-3">
+            <label class="form-label">Nombre</label>
+            <input type="text" class="form-control" id="pnombre" readonly>
+          </div>
+          <div class="mb-3">
+            <label class="form-label">Precio</label>
+            <input type="number" class="form-control" id="pprecio" placeholder="0.00" step="0.01" required>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+        <button type="submit" form="formPrecio" class="btn btn-primary">
+          <i class="fa fa-save"></i> Guardar Precio
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Bootstrap JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+  // Ejemplo de datos de productos (reemplaza o integra con tu backend/localStorage)
+  const productos = [
+    { codigo: '001', nombre: 'Producto A', seccion: 'Electrónica', proveedor: 'Proveedor A', descripcion: 'Descripción A', precio: null },
+    { codigo: '002', nombre: 'Producto B', seccion: 'Hogar', proveedor: 'Proveedor B', descripcion: 'Descripción B', precio: null },
+    { codigo: '003', nombre: 'Producto C', seccion: 'Jardín', proveedor: 'Proveedor C', descripcion: 'Descripción C', precio: null }
+  ];
+  let modalPrecio;
+
+  document.addEventListener('DOMContentLoaded', () => {
+    modalPrecio = new bootstrap.Modal(document.getElementById('precioModal'));
+    document.getElementById('formPrecio').addEventListener('submit', guardarPrecio);
+    renderizarTabla();
+  });
+
+  // Renderizar tabla de productos con precios
+  function renderizarTabla() {
+    const tbody = document.querySelector('#tablaPrecios tbody');
+    tbody.innerHTML = '';
+    productos.forEach((p, i) => {
+      const tr = document.createElement('tr');
+      tr.innerHTML = `
+        <td>${p.codigo}</td>
+        <td>${p.nombre}</td>
+        <td>${p.seccion}</td>
+        <td>${p.proveedor}</td>
+        <td>${p.descripcion}</td>
+        <td>${p.precio !== null ? '$' + p.precio.toFixed(2) : '<span class="text-muted">Sin asignar</span>'}</td>
+        <td>
+          <button class="btn btn-sm btn-info" onclick="abrirModalPrecio(${i})">
+            <i class="fa fa-tag"></i> Asignar Precio
+          </button>
+        </td>`;
+      tbody.appendChild(tr);
+    });
+  }
+
+  // Abrir modal y cargar datos del producto seleccionado
+  function abrirModalPrecio(index) {
+    const p = productos[index];
+    document.getElementById('indexPrecio').value = index;
+    document.getElementById('pcodigo').value = p.codigo;
+    document.getElementById('pnombre').value = p.nombre;
+    document.getElementById('pprecio').value = p.precio !== null ? p.precio : '';
+    modalPrecio.show();
+  }
+
+  // Guardar precio en el array y actualizar tabla
+  function guardarPrecio(e) {
+    e.preventDefault();
+    const idx = parseInt(document.getElementById('indexPrecio').value, 10);
+    const precio = parseFloat(document.getElementById('pprecio').value);
+    if (isNaN(precio) || precio < 0) {
+      Swal.fire('Error', 'Ingrese un precio válido', 'warning');
+      return;
+    }
+    productos[idx].precio = precio;
+    renderizarTabla();
+    modalPrecio.hide();
+    Swal.fire('Guardado', 'Precio asignado correctamente', 'success');
+  }
+</script>
+</body>
+</html>

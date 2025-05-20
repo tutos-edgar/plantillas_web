@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Gestión de Ofertas</title>
+  <!-- Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <!-- FontAwesome -->
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css" rel="stylesheet">
+  <!-- SweetAlert2 -->
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+</head>
+<body>
+<div class="container py-4">
+  <div class="d-flex justify-content-between align-items-center mb-3">
+    <h1 class="h3">Ofertas de Productos</h1>
+    <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#ofertaModal">
+      <i class="fa fa-plus"></i> Crear Oferta
+    </button>
+  </div>
+
+  <div class="table-responsive">
+    <table class="table table-striped" id="tablaOfertas">
+      <thead>
+        <tr>
+          <th>Producto</th>
+          <th>Descripción</th>
+          <th>Precio Original</th>
+          <th>Descuento (%)</th>
+          <th>Precio Oferta</th>
+          <th>Vigencia</th>
+          <th>Acciones</th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+  </div>
+</div>
+
+<!-- Modal crear/editar oferta -->
+<div class="modal fade" id="ofertaModal" tabindex="-1" aria-labelledby="ofertaModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="ofertaModalLabel">Crear Oferta</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body">
+        <form id="formOferta">
+          <input type="hidden" id="indexEditarOferta" value="-1">
+          <div class="row g-3">
+            <div class="col-md-6">
+              <label for="ofProducto" class="form-label">Producto</label>
+              <select class="form-select" id="ofProducto" required>
+                <option value="">Seleccione producto...</option>
+              </select>
+            </div>
+            <div class="col-md-6">
+              <label for="ofDescuento" class="form-label">Descuento (%)</label>
+              <input type="number" class="form-control" id="ofDescuento" min="0" max="100" required>
+            </div>
+            <div class="col-md-6">
+              <label for="ofFechaInicio" class="form-label">Fecha Inicio</label>
+              <input type="date" class="form-control" id="ofFechaInicio" required>
+            </div>
+            <div class="col-md-6">
+              <label for="ofFechaFin" class="form-label">Fecha Fin</label>
+              <input type="date" class="form-control" id="ofFechaFin" required>
+            </div>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+        <button type="submit" form="formOferta" class="btn btn-primary">
+          <i class="fa fa-save"></i> Guardar Oferta
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Bootstrap JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+  // Datos de ejemplo de productos (usa tus datos reales o integra API)
+  const productos = [
+    { codigo: '001', nombre: 'Producto A', descripcion: 'Descripción A', precio: 100.00 },
+    { codigo: '002', nombre: 'Producto B', descripcion: 'Descripción B', precio: 150.00 },
+    { codigo: '003', nombre: 'Producto C', descripcion: 'Descripción C', precio: 200.00 }
+  ];
+  const ofertas = [];
+  let modalOferta;
+
+  document.addEventListener('DOMContentLoaded', () => {
+    // Inicializar modal y eventos
+    modalOferta = new bootstrap.Modal(document.getElementById('ofertaModal'));
+    document.getElementById('formOferta').addEventListener('submit', guardarOferta);
+    cargarComboProductos();
+    renderizarOfertas();
+  });
+
+  function cargarComboProductos() {
+    const select = document.getElementById('ofProducto');
+    productos.forEach(p => {
+      const opt = document.createElement('option');
+      opt.value = p.codigo;
+      opt.textContent = `${p.nombre} - $${p.precio.toFixed(2)}`;
+      select.appendChild(opt);
+    });
+  }
+
+  function guardarOferta(e) {
+    e.preventDefault();
+    const idx = parseInt(document.getElementById('indexEditarOferta').value, 10);
+    const codigo = document.getElementById('ofProducto').value;
+    const descuento = parseFloat(document.getElementById('ofDescuento').value);
+    const fechaInicio = document.getElementById('ofFechaInicio').value;
+    const fechaFin = document.getElementById('ofFechaFin').value;
+
+    // Datos básicos del producto
+    const prod = productos.find(p => p.codigo === codigo);
+    if (!prod) return;
+
+    const precioOferta = +(prod.precio * (1 - descuento / 100)).toFixed(2);
+    const oferta = { codigo, nombre: prod.nombre, descripcion: prod.descripcion, precioOriginal: prod.precio, descuento, precioOferta, vigencia: `${fechaInicio} a ${fechaFin}` };
+
+    if (idx >= 0) {
+      ofertas[idx] = oferta;
+    } else {
+      ofertas.push(oferta);
+    }
+
+    renderizarOfertas();
+    document.getElementById('formOferta').reset();
+    document.getElementById('indexEditarOferta').value = -1;
+    document.getElementById('ofertaModalLabel').textContent = 'Crear Oferta';
+    modalOferta.hide();
+  }
+
+  function renderizarOfertas() {
+    const tbody = document.querySelector('#tablaOfertas tbody');
+    tbody.innerHTML = '';
+    ofertas.forEach((o, i) => {
+      const tr = document.createElement('tr');
+      tr.innerHTML = `
+        <td>${o.nombre}</td>
+        <td>${o.descripcion}</td>
+        <td>$${o.precioOriginal.toFixed(2)}</td>
+        <td>${o.descuento}%</td>
+        <td>$${o.precioOferta.toFixed(2)}</td>
+        <td>${o.vigencia}</td>
+        <td>
+          <button class="btn btn-sm btn-warning me-1" onclick="editarOferta(${i})"><i class="fa fa-edit"></i></button>
+          <button class="btn btn-sm btn-danger" onclick="eliminarOferta(${i})"><i class="fa fa-trash"></i></button>
+        </td>`;
+      tbody.appendChild(tr);
+    });
+  }
+
+  window.editarOferta = function(i) {
+    const o = ofertas[i];
+    document.getElementById('indexEditarOferta').value = i;
+    document.getElementById('ofProducto').value = o.codigo;
+    document.getElementById('ofDescuento').value = o.descuento;
+    const [inicio, fin] = o.vigencia.split(' a ');
+    document.getElementById('ofFechaInicio').value = inicio;
+    document.getElementById('ofFechaFin').value = fin;
+    document.getElementById('ofertaModalLabel').textContent = 'Editar Oferta';
+    modalOferta.show();
+  };
+
+  window.eliminarOferta = function(i) {
+    Swal.fire({
+      title: '¿Desea eliminar esta oferta?',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonText: 'Sí, eliminar',
+      cancelButtonText: 'Cancelar'
+    }).then(result => {
+      if (result.isConfirmed) {
+        ofertas.splice(i, 1);
+        renderizarOfertas();
+        Swal.fire('Eliminada', 'La oferta ha sido eliminada.', 'success');
+      }
+    });
+  };
+</script>
+</body>
+</html>

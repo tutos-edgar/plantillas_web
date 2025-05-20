@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Registrar Venta</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+</head>
+<body>
+<div class="container py-4">
+  <h1 class="mb-4">Registrar Venta</h1>
+  
+  <!-- Formulario de selección -->
+  <div class="card mb-4">
+    <div class="card-body">
+      <form id="formProductoVenta" class="row g-3">
+        <div class="col-md-6">
+          <label for="producto" class="form-label">Producto</label>
+          <select id="producto" class="form-select" required>
+            <option value="">Seleccione un producto</option>
+            <option value="Shampoo|10">Shampoo ($10)</option>
+            <option value="Desodorante|5">Desodorante ($5)</option>
+            <option value="Jabón|2">Jabón ($2)</option>
+          </select>
+        </div>
+        <div class="col-md-3">
+          <label for="cantidad" class="form-label">Cantidad</label>
+          <input type="number" id="cantidad" class="form-control" min="1" value="1" required />
+        </div>
+        <div class="col-md-3 d-flex align-items-end">
+          <button type="submit" class="btn btn-primary w-100">
+            <i class="fa fa-plus"></i> Agregar
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Tabla de productos añadidos -->
+  <div class="table-responsive mb-4">
+    <table class="table table-bordered" id="tablaVenta">
+      <thead class="table-light">
+        <tr>
+          <th>Producto</th>
+          <th>Precio Unitario</th>
+          <th>Cantidad</th>
+          <th>Subtotal</th>
+          <th>Acciones</th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+      <tfoot>
+        <tr>
+          <td colspan="3" class="text-end"><strong>Total:</strong></td>
+          <td id="totalVenta" colspan="2">$0.00</td>
+        </tr>
+      </tfoot>
+    </table>
+  </div>
+
+  <div class="text-end">
+    <button class="btn btn-success" onclick="registrarVenta()">
+      <i class="fa fa-check"></i> Confirmar Venta
+    </button>
+  </div>
+</div>
+
+<!-- Scripts -->
+<script>
+  const tablaBody = document.querySelector("#tablaVenta tbody");
+  const totalVenta = document.getElementById("totalVenta");
+  let venta = [];
+
+  document.getElementById("formProductoVenta").addEventListener("submit", (e) => {
+    e.preventDefault();
+    const prodValue = document.getElementById("producto").value;
+    const cantidad = parseInt(document.getElementById("cantidad").value);
+    if (!prodValue || cantidad <= 0) return;
+
+    const [nombre, precioStr] = prodValue.split("|");
+    const precio = parseFloat(precioStr);
+    const subtotal = precio * cantidad;
+
+    venta.push({ nombre, precio, cantidad, subtotal });
+    renderTabla();
+    e.target.reset();
+  });
+
+  function renderTabla() {
+    tablaBody.innerHTML = "";
+    let total = 0;
+    venta.forEach((item, i) => {
+      total += item.subtotal;
+      const tr = document.createElement("tr");
+      tr.innerHTML = `
+        <td>${item.nombre}</td>
+        <td>$${item.precio.toFixed(2)}</td>
+        <td>${item.cantidad}</td>
+        <td>$${item.subtotal.toFixed(2)}</td>
+        <td>
+          <button class="btn btn-sm btn-danger" onclick="eliminarProducto(${i})">
+            <i class="fa fa-trash"></i>
+          </button>
+        </td>
+      `;
+      tablaBody.appendChild(tr);
+    });
+    totalVenta.textContent = `$${total.toFixed(2)}`;
+  }
+
+  function eliminarProducto(i) {
+    venta.splice(i, 1);
+    renderTabla();
+  }
+
+  function registrarVenta() {
+    if (venta.length === 0) {
+      Swal.fire("Error", "No hay productos en la venta", "error");
+      return;
+    }
+
+    Swal.fire({
+      title: "¿Confirmar venta?",
+      text: "Esta acción registrará la venta.",
+      icon: "question",
+      showCancelButton: true,
+      confirmButtonText: "Sí, vender",
+      cancelButtonText: "Cancelar",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        console.log("Venta registrada:", venta);
+        Swal.fire("Éxito", "Venta registrada correctamente", "success");
+        venta = [];
+        renderTabla();
+      }
+    });
+  }
+</script>
+
+<!-- FontAwesome para íconos -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/js/all.min.js"></script>
+</body>
+</html>
