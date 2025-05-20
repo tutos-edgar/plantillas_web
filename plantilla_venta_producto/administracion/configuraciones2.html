@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Configuración de Usuario</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: #f8f9fa;
+        }
+        
+        .sidebar {
+            height: 100vh;
+            background-color: #343a40;
+            color: white;
+        }
+        
+        .sidebar a {
+            color: white;
+            text-decoration: none;
+        }
+        
+        .sidebar a:hover {
+            background-color: #495057;
+            border-radius: 5px;
+        }
+        
+        .form-control:focus {
+            box-shadow: none;
+            border-color: #343a40;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container-fluid">
+        <div class="row">
+            <!-- Menú lateral -->
+            <nav class="col-md-3 col-lg-2 d-md-block sidebar p-3">
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <h4 class="mb-0">Dashboard</h4>
+                    <i class="fas fa-cogs"></i>
+                </div>
+                <ul class="nav flex-column">
+                    <li class="nav-item mb-2">
+                        <a class="nav-link active" href="#" data-section="perfil"><i class="fas fa-user me-2"></i> Perfil</a>
+                    </li>
+                    <li class="nav-item mb-2">
+                        <a class="nav-link" href="#" data-section="usuario"><i class="fas fa-key me-2"></i> Usuario</a>
+                    </li>
+                    <li class="nav-item mb-2">
+                        <a class="nav-link" href="#" data-section="seguridad"><i class="fas fa-key me-2"></i> Seguridad</a>
+                    </li>
+                    <!-- <li class="nav-item mb-2">
+                        <a class="nav-link" href="#" data-section="notificaion"><i class="fas fa-bell me-2"></i> Notificaciones</a>
+                    </li> -->
+                    <li class="nav-item mt-4">
+                        <a class="nav-link text-warning" href="dashboard.html" data-exit="true"><i class="fas fa-sign-out-alt me-2"></i> Salir</a>
+                    </li>
+                </ul>
+            </nav>
+
+            <!-- Contenido principal -->
+            <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4 py-4">
+
+                <section id="perfil" class="form-section">
+                    <h2>Perfil personal</h2>
+                    <form>
+                        <div class="mb-3">
+                            <label for="nombre" class="form-label">Nombre completo</label>
+                            <input type="text" id="nombre" class="form-control" value="Edgar Rolando" />
+                        </div>
+                        <div class="mb-3">
+                            <label for="usuario" class="form-label">Nombre de usuario</label>
+                            <input type="text" id="usuario" class="form-control" value="edgar123" />
+                        </div>
+                        <div class="mb-3">
+                            <label for="email" class="form-label">Correo electrónico</label>
+                            <input type="email" id="email" class="form-control" value="edgar@example.com" />
+                        </div>
+                        <div class="mb-3">
+                            <label for="telefono" class="form-label">Número de teléfono</label>
+                            <input type="tel" id="telefono" class="form-control" value="+5215551234567" />
+                        </div>
+                        <div class="mb-3">
+                            <label for="fechaNacimiento" class="form-label">Fecha de nacimiento</label>
+                            <input type="date" id="fechaNacimiento" class="form-control" value="1985-05-20" />
+                        </div>
+                        <div class="mb-3">
+                            <label for="genero" class="form-label">Género</label>
+                            <select id="genero" class="form-select">
+                            <option value="">-- Seleccionar --</option>
+                            <option value="masculino" selected>Masculino</option>
+                            <option value="femenino">Femenino</option>
+                            <option value="otro">Otro</option>
+                        </select>
+                        </div>
+                        <div class="mb-3">
+                            <label for="direccion" class="form-label">Dirección</label>
+                            <textarea id="direccion" class="form-control" rows="2">Calle Falsa 123, Ciudad, Estado, País</textarea>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Guardar cambios</button>
+                    </form>
+                </section>
+
+                <section id="usuario" class="form-section" style="display: none;">
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <h2>Configuración de Usuario</h2>
+                    </div>
+
+                    <div class="card shadow-sm">
+                        <div class="card-body">
+                            <form>
+                                <div class="mb-3">
+                                    <label for="nombre" class="form-label">Usuario</label>
+                                    <input type="text" class="form-control" id="nombre" placeholder="Ingresa tu nombre completo" />
+                                </div>
+
+                                <div class="mb-3">
+                                    <label for="password" class="form-label">Pregunta Secreta</label>
+                                    <input type="text" class="form-control" id="password" placeholder="Ingresa Tu Respuesta" />
+                                </div>
+
+
+                                <div class="mb-3">
+                                    <label for="password" class="form-label">Respuesta</label>
+                                    <input type="password" class="form-control" id="password" placeholder="Ingresa Tu Respuesta" />
+                                </div>
+
+                                <div class="mb-3">
+                                    <label for="correo" class="form-label">Mejor Amigo</label>
+                                    <input type="password" class="form-control" id="correo" placeholder="Quien es tu Mejor Amigo" />
+                                </div>
+
+                                <div class="mb-3">
+                                    <label for="imagen" class="form-label">Imagen AntiPishing</label>
+                                    <input type="file" class="form-control" id="imagen" />
+                                </div>
+
+                                <button type="submit" class="btn btn-dark"><i class="fas fa-save me-2"></i>Guardar cambios</button>
+                            </form>
+                        </div>
+                    </div>
+                </section>
+
+                <section id="seguridad" class=" form-section " style="display: none; ">
+                    <div class="d-flex justify-content-between align-items-center mb-3 ">
+                        <h2>Configuración de Contraseña</h2>
+                    </div>
+
+                    <div class="card shadow-sm ">
+                        <div class="card-body ">
+                            <form>
+                                <div class="mb-3 ">
+                                    <label for="nombre " class="form-label ">Contraseñ Actual</label>
+                                    <input type="text " class="form-control " id="nombre " placeholder="Ingresa la Contraseña Actual " />
+                                </div>
+
+                                <!-- <div class="mb-3 ">
+                                    <label for="correo " class="form-label ">Correo electrónico</label>
+                                    <input type="email " class="form-control " id="correo " placeholder="ejemplo@correo.com " />
+                                </div> -->
+
+                                <div class="mb-3 ">
+                                    <label for="password " class="form-label ">Nueva contraseña</label>
+                                    <input type="password " class="form-control " id="password " placeholder="******** " />
+                                </div>
+
+                                <div class="mb-3 ">
+                                    <label for="imagen " class="form-label ">Confirmar Contraseña</label>
+                                    <input type="password " class="form-control " id="password " placeholder="******** " />
+                                </div>
+
+                                <button type="submit " class="btn btn-dark "><i class="fas fa-save me-2 "></i>Guardar cambios</button>
+                            </form>
+                        </div>
+                    </div>
+                </section>
+
+
+            </main>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js "></script>
+    <script>
+        // Cambiar sección visible
+        const links = document.querySelectorAll('.sidebar a');
+        const sections = document.querySelectorAll('main section');
+
+        // links.forEach(link => {
+        //     link.addEventListener('click', e => {
+        //         e.preventDefault();
+        //         const target = link.getAttribute('data-section');
+
+        //         // Quitar clase active a todos
+        //         links.forEach(l => l.classList.remove('active'));
+        //         link.classList.add('active');
+
+        //         // Ocultar todas las secciones y mostrar la seleccionada
+        //         sections.forEach(section => {
+        //             if (section.id === target) {
+        //                 section.style.display = 'block';
+        //             } else {
+        //                 section.style.display = 'none';
+        //             }
+        //         });
+        //     });
+        // });
+
+        // Confirmación eliminar cuenta
+
+        links.forEach(link => {
+            link.addEventListener('click', e => {
+                const href = link.getAttribute('href');
+                const isExit = link.hasAttribute('data-exit'); // o usar otro atributo que identifique el link de salir
+
+                if (isExit) {
+                    // Es el link de salir, dejamos que siga su comportamiento normal (redirigir)
+                    return; // Salimos del handler sin hacer nada más
+                }
+
+                // Para links normales que cambian sección
+                e.preventDefault();
+
+                const target = link.getAttribute('data-section');
+
+                // Quitar clase active a todos
+                links.forEach(l => l.classList.remove('active'));
+                link.classList.add('active');
+
+                // Ocultar todas las secciones y mostrar la seleccionada
+                sections.forEach(section => {
+                    if (section.id === target) {
+                        section.style.display = 'block';
+                    } else {
+                        section.style.display = 'none';
+                    }
+                });
+            });
+        });
+
+        const btnEliminarCuenta = document.getElementById('btnEliminarCuenta');
+        if (btnEliminarCuenta) {
+            btnEliminarCuenta.addEventListener('click', () => {
+                if (confirm('¿Estás seguro de eliminar tu cuenta? Esta acción no se puede deshacer.')) {
+                    alert('Cuenta eliminada (simulación)');
+                    // Aquí iría la lógica para eliminar cuenta en backend
+                }
+            });
+        }
+    </script>
+</body>
+
+</html>

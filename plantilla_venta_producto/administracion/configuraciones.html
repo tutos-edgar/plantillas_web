@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Panel de Configuración de Usuario</title>
+    <!-- Bootstrap CSS CDN -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <!-- FontAwesome para iconos -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet" />
+    <style>
+        body {
+            min-height: 100vh;
+            background: #f8f9fa;
+        }
+        
+        .sidebar {
+            min-height: 100vh;
+            background: #343a40;
+            color: white;
+            padding-top: 1rem;
+        }
+        
+        .sidebar a {
+            color: white;
+            text-decoration: none;
+            display: block;
+            padding: 12px 20px;
+            cursor: pointer;
+        }
+        
+        .sidebar a:hover,
+        .sidebar a.active {
+            background-color: #495057;
+            color: #fff;
+        }
+        
+        .content {
+            padding: 2rem;
+        }
+        
+        h2 {
+            margin-bottom: 1.5rem;
+        }
+        
+        .form-section {
+            max-width: 700px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="d-flex">
+        <!-- Sidebar -->
+        <nav class="sidebar flex-shrink-0">
+            <h4 class="text-center mb-4">Configuración</h4>
+            <a href="#" class="active" data-section="perfil"><i class="fa fa-user me-2"></i>Perfil personal</a>
+            <a href="#" data-section="seguridad"><i class="fa fa-shield-alt me-2"></i>Seguridad</a>
+            <a href="#" data-section="notificaciones"><i class="fa fa-bell me-2"></i>Notificaciones</a>
+            <a href="#" data-section="privacidad"><i class="fa fa-user-secret me-2"></i>Privacidad</a>
+            <a href="#" data-section="preferencias"><i class="fa fa-cog me-2"></i>Preferencias</a>
+            <a href="#" data-section="conexiones"><i class="fa fa-link me-2"></i>Cuentas vinculadas</a>
+            <a href="#" data-section="pagos"><i class="fa fa-credit-card me-2"></i>Métodos de pago</a>
+            <a href="#" data-section="avanzado"><i class="fa fa-tools me-2"></i>Configuración avanzada</a>
+        </nav>
+
+        <!-- Contenido principal -->
+        <main class="content flex-grow-1">
+            <!-- Perfil personal -->
+            <section id="perfil" class="form-section">
+                <h2>Perfil personal</h2>
+                <form>
+                    <div class="mb-3">
+                        <label for="nombre" class="form-label">Nombre completo</label>
+                        <input type="text" id="nombre" class="form-control" value="Edgar Rolando" />
+                    </div>
+                    <div class="mb-3">
+                        <label for="usuario" class="form-label">Nombre de usuario</label>
+                        <input type="text" id="usuario" class="form-control" value="edgar123" />
+                    </div>
+                    <div class="mb-3">
+                        <label for="email" class="form-label">Correo electrónico</label>
+                        <input type="email" id="email" class="form-control" value="edgar@example.com" />
+                    </div>
+                    <div class="mb-3">
+                        <label for="telefono" class="form-label">Número de teléfono</label>
+                        <input type="tel" id="telefono" class="form-control" value="+5215551234567" />
+                    </div>
+                    <div class="mb-3">
+                        <label for="fechaNacimiento" class="form-label">Fecha de nacimiento</label>
+                        <input type="date" id="fechaNacimiento" class="form-control" value="1985-05-20" />
+                    </div>
+                    <div class="mb-3">
+                        <label for="genero" class="form-label">Género</label>
+                        <select id="genero" class="form-select">
+                            <option value="">-- Seleccionar --</option>
+                            <option value="masculino" selected>Masculino</option>
+                            <option value="femenino">Femenino</option>
+                            <option value="otro">Otro</option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label for="direccion" class="form-label">Dirección</label>
+                        <textarea id="direccion" class="form-control" rows="2">Calle Falsa 123, Ciudad, Estado, País</textarea>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Guardar cambios</button>
+                </form>
+            </section>
+
+            <!-- Seguridad -->
+            <section id="seguridad" class="form-section" style="display:none;">
+                <h2>Seguridad</h2>
+                <form>
+                    <div class="mb-3">
+                        <label for="actualPass" class="form-label">Contraseña actual</label>
+                        <input type="password" id="actualPass" class="form-control" />
+                    </div>
+                    <div class="mb-3">
+                        <label for="nuevaPass" class="form-label">Nueva contraseña</label>
+                        <input type="password" id="nuevaPass" class="form-control" />
+                    </div>
+                    <div class="mb-3">
+                        <label for="confirmPass" class="form-label">Confirmar nueva contraseña</label>
+                        <input type="password" id="confirmPass" class="form-control" />
+                    </div>
+                    <div class="mb-3 form-check">
+                        <input type="checkbox" class="form-check-input" id="2fa" />
+                        <label class="form-check-label" for="2fa">Activar autenticación de dos factores (2FA)</label>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Actualizar seguridad</button>
+                </form>
+            </section>
+
+            <!-- Notificaciones -->
+            <section id="notificaciones" class="form-section" style="display:none;">
+                <h2>Notificaciones</h2>
+                <form>
+                    <div class="mb-3 form-check">
+                        <input type="checkbox" class="form-check-input" id="emailNotif" checked />
+                        <label class="form-check-label" for="emailNotif">Recibir notificaciones por correo electrónico</label>
+                    </div>
+                    <div class="mb-3 form-check">
+                        <input type="checkbox" class="form-check-input" id="pushNotif" />
+                        <label class="form-check-label" for="pushNotif">Recibir notificaciones push</label>
+                    </div>
+                    <div class="mb-3 form-check">
+                        <input type="checkbox" class="form-check-input" id="smsNotif" />
+                        <label class="form-check-label" for="smsNotif">Recibir notificaciones SMS</label>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Guardar preferencias</button>
+                </form>
+            </section>
+
+            <!-- Privacidad -->
+            <section id="privacidad" class="form-section" style="display:none;">
+                <h2>Privacidad</h2>
+                <form>
+                    <div class="mb-3">
+                        <label class="form-label">Visibilidad del perfil</label>
+                        <select class="form-select" id="visibilidadPerfil">
+                            <option value="publico">Público</option>
+                            <option value="contactos" selected>Solo contactos</option>
+                            <option value="privado">Privado</option>
+                        </select>
+                    </div>
+                    <div class="mb-3 form-check">
+                        <input type="checkbox" class="form-check-input" id="compartirDatos" />
+                        <label class="form-check-label" for="compartirDatos">Permitir compartir datos con terceros</label>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Guardar cambios</button>
+                    <hr />
+                    <button type="button" class="btn btn-danger" id="btnEliminarCuenta">Eliminar cuenta</button>
+                </form>
+            </section>
+
+            <!-- Preferencias -->
+            <section id="preferencias" class="form-section" style="display:none;">
+                <h2>Preferencias</h2>
+                <form>
+                    <div class="mb-3">
+                        <label for="idioma" class="form-label">Idioma</label>
+                        <select id="idioma" class="form-select">
+                            <option value="es" selected>Español</option>
+                            <option value="en">Inglés</option>
+                            <option value="fr">Francés</option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label for="zonaHoraria" class="form-label">Zona horaria</label>
+                        <select id="zonaHoraria" class="form-select">
+                            <option value="GMT-6" selected>GMT -6 (CDMX)</option>
+                            <option value="GMT-5">GMT -5 (Bogotá)</option>
+                            <option value="GMT+1">GMT +1 (Madrid)</option>
+                        </select>
+                    </div>
+                    <div class="mb-3 form-check">
+                        <input type="checkbox" id="modoOscuro" class="form-check-input" />
+                        <label for="modoOscuro" class="form-check-label">Tema oscuro</label>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Guardar preferencias</button>
+                </form>
+            </section>
+
+            <!-- Cuentas vinculadas -->
+            <section id="conexiones" class="form-section" style="display:none;">
+                <h2>Cuentas vinculadas</h2>
+                <ul class="list-group mb-3">
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                        Google
+                        <button class="btn btn-sm btn-danger">Desvincular</button>
+                    </li>
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                        Facebook
+                        <button class="btn btn-sm btn-danger">Desvincular</button>
+                    </li>
+                </ul>
+                <button class="btn btn-primary">Vincular nueva cuenta</button>
+            </section>
+
+            <!-- Métodos de pago -->
+            <section id="pagos" class="form-section" style="display:none;">
+                <h2>Métodos de pago</h2>
+                <form>
+                    <div class="mb-3">
+                        <label for="tarjeta" class="form-label">Número de tarjeta</label>
+                        <input type="text" id="tarjeta" class="form-control" placeholder="xxxx-xxxx-xxxx-xxxx" />
+                    </div>
+                    <div class="mb-3">
+                        <label for="nombreTarjeta" class="form-label">Nombre en la tarjeta</label>
+                        <input type="text" id="nombreTarjeta" class="form-control" />
+                    </div>
+                    <div class="mb-3 d-flex gap-3">
+                        <input type="text" class="form-control" placeholder="MM/AA" maxlength="5" />
+                        <input type="text" class="form-control" placeholder="CVV" maxlength="3" />
+                    </div>
+                    <div class="mb-3">
+                        <label for="direccionFacturacion" class="form-label">Dirección de facturación</label>
+                        <textarea id="direccionFacturacion" class="form-control" rows="2"></textarea>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Guardar método de pago</button>
+                </form>
+            </section>
+
+            <!-- Configuración avanzada -->
+            <section id="avanzado" class="form-section" style="display:none;">
+                <h2>Configuración avanzada</h2>
+                <p>Aquí puedes gestionar configuraciones avanzadas como API keys, logs y más.</p>
+                <button class="btn btn-danger">Eliminar todas las sesiones</button>
+                <button class="btn btn-warning mt-3">Generar nueva API Key</button>
+                <div class="mt-3">
+                    <label for="apiKey" class="form-label">API Key actual</label>
+                    <input type="text" id="apiKey" class="form-control" readonly value="1234-5678-ABCD-EFGH" />
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <!-- Bootstrap JS CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Cambiar sección visible
+        const links = document.querySelectorAll('.sidebar a');
+        const sections = document.querySelectorAll('main section');
+
+        links.forEach(link => {
+            link.addEventListener('click', e => {
+                e.preventDefault();
+                const target = link.getAttribute('data-section');
+
+                // Quitar clase active a todos
+                links.forEach(l => l.classList.remove('active'));
+                link.classList.add('active');
+
+                // Ocultar todas las secciones y mostrar la seleccionada
+                sections.forEach(section => {
+                    if (section.id === target) {
+                        section.style.display = 'block';
+                    } else {
+                        section.style.display = 'none';
+                    }
+                });
+            });
+        });
+
+        // Confirmación eliminar cuenta
+        const btnEliminarCuenta = document.getElementById('btnEliminarCuenta');
+        if (btnEliminarCuenta) {
+            btnEliminarCuenta.addEventListener('click', () => {
+                if (confirm('¿Estás seguro de eliminar tu cuenta? Esta acción no se puede deshacer.')) {
+                    alert('Cuenta eliminada (simulación)');
+                    // Aquí iría la lógica para eliminar cuenta en backend
+                }
+            });
+        }
+    </script>
+</body>
+
+</html>
