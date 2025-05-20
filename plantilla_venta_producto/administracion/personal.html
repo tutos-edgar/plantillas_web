@@ -1,96 +1,203 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Registro de Personal</title>
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Registro de Personas</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.1/font/bootstrap-icons.css" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css"/>
 </head>
 <body class="bg-light">
-  <div class="container py-5">
-    <h2 class="mb-4">Registro de Personal</h2>
-    <button class="btn btn-primary mb-3" data-bs-toggle="modal" data-bs-target="#modalNuevoPersonal">Nuevo</button>
+  <div class="container mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+      <h2>Registros</h2>
+      <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#registroModal" id="btnAbrirModal">
+        <i class="bi bi-plus-circle me-1"></i> Agregar
+      </button>
+    </div>
 
     <div class="table-responsive">
-      <table class="table table-striped" id="tablaPersonal">
-        <thead>
+      <table class="table table-bordered table-striped" id="tablaRegistros">
+        <thead class="table-dark">
           <tr>
-            <th>ID</th>
+            <th>Documento</th>
             <th>Nombre</th>
+            <th>Apellido</th>
+            <th>Teléfono</th>
             <th>Correo</th>
+            <th>Fecha Nacimiento</th>
+            <th>Edad</th>
+            <th>Estado</th>
+            <th>Cant. Fallida</th>
             <th>Acciones</th>
           </tr>
         </thead>
-        <tbody>
-          <!-- Ejemplo de fila -->
-          <!-- foreach ($personal as $p) -->
-          <tr>
-            <td>1</td>
-            <td>Juan Pérez</td>
-            <td>juan@ejemplo.com</td>
-            <td>
-              <button class="btn btn-sm btn-warning" data-bs-toggle="modal" data-bs-target="#modalEditarPersonal">Modificar</button>
-              <button class="btn btn-sm btn-danger">Eliminar</button>
-            </td>
-          </tr>
-        </tbody>
+        <tbody></tbody>
       </table>
     </div>
   </div>
 
-  <!-- Modal Nuevo Personal -->
-  <div class="modal fade" id="modalNuevoPersonal" tabindex="-1">
-    <div class="modal-dialog">
-      <form action="personal.php" method="POST" class="modal-content">
+  <!-- Modal -->
+  <div class="modal fade" id="registroModal" tabindex="-1" aria-labelledby="registroModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title">Nuevo Personal</h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+          <h5 class="modal-title" id="registroModalLabel">Registrar Persona</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
         </div>
         <div class="modal-body">
-          <div class="mb-3">
-            <label for="nombre" class="form-label">Nombre completo</label>
-            <input type="text" class="form-control" id="nombre" name="nombre" required>
-          </div>
-          <div class="mb-3">
-            <label for="correo" class="form-label">Correo electrónico</label>
-            <input type="email" class="form-control" id="correo" name="correo" required>
-          </div>
+          <form id="registroForm" class="row g-3">
+            <div class="col-md-4">
+              <label for="documento" class="form-label">Documento</label>
+              <input type="text" class="form-control" id="documento" required>
+            </div>
+            <div class="col-md-4">
+              <label for="nombre" class="form-label">Nombre</label>
+              <input type="text" class="form-control" id="nombre" required>
+            </div>
+            <div class="col-md-4">
+              <label for="apellido" class="form-label">Apellido</label>
+              <input type="text" class="form-control" id="apellido" required>
+            </div>
+            <div class="col-md-4">
+              <label for="telefono" class="form-label">Teléfono</label>
+              <input type="text" class="form-control" id="telefono" required>
+            </div>
+            <div class="col-md-4">
+              <label for="correo" class="form-label">Correo</label>
+              <input type="email" class="form-control" id="correo" required>
+            </div>
+            <div class="col-md-4">
+              <label for="fechaNacimiento" class="form-label">Fecha de Nacimiento</label>
+              <input type="date" class="form-control" id="fechaNacimiento" required>
+            </div>
+            <div class="col-md-4">
+              <label for="edad" class="form-label">Edad</label>
+              <input type="number" class="form-control" id="edad" readonly>
+            </div>
+            <div class="col-md-4">
+              <label for="estado" class="form-label">Estado</label>
+              <select class="form-select" id="estado" required>
+                <option selected disabled>Seleccione...</option>
+                <option value="Activo">Activo</option>
+                <option value="Inactivo">Inactivo</option>
+              </select>
+            </div>
+            <div class="col-md-4">
+              <label for="cantidad_fallida" class="form-label">Cantidad Fallida</label>
+              <input type="number" class="form-control" id="cantidad_fallida" min="0" required>
+            </div>
+          </form>
         </div>
         <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-          <button type="submit" class="btn btn-primary">Guardar</button>
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+          <button type="button" class="btn btn-primary" id="guardarRegistro">Guardar</button>
         </div>
-      </form>
-    </div>
-  </div>
-
-  <!-- Modal Editar Personal (igual campos) -->
-  <div class="modal fade" id="modalEditarPersonal" tabindex="-1">
-    <div class="modal-dialog">
-      <form action="personal.php" method="POST" class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title">Editar Personal</h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-        </div>
-        <div class="modal-body">
-          <input type="hidden" name="id" value="">
-          <div class="mb-3">
-            <label class="form-label">Nombre completo</label>
-            <input type="text" class="form-control" name="nombre" required>
-          </div>
-          <div class="mb-3">
-            <label class="form-label">Correo electrónico</label>
-            <input type="email" class="form-control" name="correo" required>
-          </div>
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-          <button type="submit" class="btn btn-primary">Actualizar</button>
-        </div>
-      </form>
+      </div>
     </div>
   </div>
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <script>
+    const form = document.getElementById('registroForm');
+    const tablaBody = document.querySelector('#tablaRegistros tbody');
+    const modal = new bootstrap.Modal(document.getElementById('registroModal'));
+    const btnGuardar = document.getElementById('guardarRegistro');
+
+    let filaEditando = null;
+
+    document.getElementById('fechaNacimiento').addEventListener('change', () => {
+      const fecha = new Date(document.getElementById('fechaNacimiento').value);
+      const hoy = new Date();
+      let edad = hoy.getFullYear() - fecha.getFullYear();
+      const m = hoy.getMonth() - fecha.getMonth();
+      if (m < 0 || (m === 0 && hoy.getDate() < fecha.getDate())) edad--;
+      document.getElementById('edad').value = edad;
+    });
+
+    btnGuardar.addEventListener('click', () => {
+      if (!form.checkValidity()) return form.reportValidity();
+      const datos = {
+        documento: document.getElementById('documento').value,
+        nombre: document.getElementById('nombre').value,
+        apellido: document.getElementById('apellido').value,
+        telefono: document.getElementById('telefono').value,
+        correo: document.getElementById('correo').value,
+        fechaNacimiento: document.getElementById('fechaNacimiento').value,
+        edad: document.getElementById('edad').value,
+        estado: document.getElementById('estado').value,
+        cantidad_fallida: document.getElementById('cantidad_fallida').value,
+      };
+
+      if (filaEditando) {
+        const celdas = filaEditando.querySelectorAll('td');
+        let i = 0;
+        for (const key in datos) {
+          celdas[i++].textContent = datos[key];
+        }
+        filaEditando = null;
+      } else {
+        const fila = document.createElement('tr');
+        for (const key in datos) {
+          const td = document.createElement('td');
+          td.textContent = datos[key];
+          fila.appendChild(td);
+        }
+        const accionesTd = document.createElement('td');
+        accionesTd.innerHTML = `
+          <button class="btn btn-sm btn-primary me-1 btn-editar"><i class="bi bi-pencil-square"></i></button>
+          <button class="btn btn-sm btn-danger btn-eliminar"><i class="bi bi-trash"></i></button>
+        `;
+        fila.appendChild(accionesTd);
+        tablaBody.appendChild(fila);
+      }
+
+      form.reset();
+      document.getElementById('edad').value = '';
+      modal.hide();
+    });
+
+    document.getElementById('btnAbrirModal').addEventListener('click', () => {
+      form.reset();
+      filaEditando = null;
+      document.getElementById('edad').value = '';
+      document.getElementById('registroModalLabel').textContent = 'Registrar Persona';
+    });
+
+    tablaBody.addEventListener('click', (e) => {
+      const btn = e.target.closest('button');
+      if (!btn) return;
+      const fila = btn.closest('tr');
+      const celdas = fila.querySelectorAll('td');
+
+      if (btn.classList.contains('btn-eliminar')) {
+        Swal.fire({
+          title: '¿Estás seguro?',
+          text: 'No podrás revertir esto',
+          icon: 'warning',
+          showCancelButton: true,
+          confirmButtonText: 'Sí, eliminar',
+          cancelButtonText: 'Cancelar'
+        }).then((result) => {
+          if (result.isConfirmed) fila.remove();
+        });
+      } else if (btn.classList.contains('btn-editar')) {
+        filaEditando = fila;
+        document.getElementById('documento').value = celdas[0].textContent;
+        document.getElementById('nombre').value = celdas[1].textContent;
+        document.getElementById('apellido').value = celdas[2].textContent;
+        document.getElementById('telefono').value = celdas[3].textContent;
+        document.getElementById('correo').value = celdas[4].textContent;
+        document.getElementById('fechaNacimiento').value = celdas[5].textContent;
+        document.getElementById('edad').value = celdas[6].textContent;
+        document.getElementById('estado').value = celdas[7].textContent;
+        document.getElementById('cantidad_fallida').value = celdas[8].textContent;
+        document.getElementById('registroModalLabel').textContent = 'Editar Persona';
+        modal.show();
+      }
+    });
+  </script>
 </body>
 </html>
