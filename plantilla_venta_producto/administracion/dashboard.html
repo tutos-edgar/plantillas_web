@@ -6,7 +6,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Panel de Administración</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+
     <style>
         html,
         body {
@@ -225,43 +228,81 @@
             <h5 class="text-center sidebar-title">Menú</h5>
             <ul class="nav flex-column">
                 <li class="nav-item">
-                    <a class="nav-link collapsed" data-bs-toggle="collapse" href="#submenu1" aria-expanded="false">
-                        <i class="fa-solid fa-user" data-bs-toggle="tooltip" title="Usuarios"></i>
+                    <a class="nav-link collapsed" data-bs-toggle="collapse" href="#submenuUsuarios" aria-expanded="false">
+                        <i class="fa-solid fa-user" data-bs-toggle="tooltip" title="Empleados"></i>
                         <span>Empleados</span>
                         <i class="fa-solid fa-caret-down float-end"></i>
                     </a>
-                    <ul class="nav collapse submenu" id="submenu1">
+                    <ul class="nav collapse submenu" id="submenuUsuarios">
                         <li class="nav-item">
                             <a class="nav-link" href="#">
-                                <i class="fa-solid fa-user-plus" data-bs-toggle="tooltip" title="Registrar Usuario"></i>
+                                <i class="fa-solid fa-user-plus" data-bs-toggle="tooltip" title="Crear Empleado"></i>
                                 <span>Crear Empleado</span>
-                            </a>
+                            </a>"
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" href="#">
-                                <i class="fa-solid fa-users"></i>
+                                <i class="fa-solid fa-users" data-bs-toggle="tooltip" title="Registrar Crear Usuario"></i>
                                 <span>Crear Usuario</span>
                             </a>
                         </li>
                     </ul>
                 </li>
+
                 <li class="nav-item">
-                    <a class="nav-link" href="#"><i class="fa-solid fa-file-circle-plus" data-bs-toggle="tooltip" title="Cotizacion"></i> <span>Agregar Cotización</span></a>
+                    <a class="nav-link collapsed" data-bs-toggle="collapse" href="#submenuProductos" aria-expanded="false">
+                        <i class="bi bi-box2" data-bs-toggle="tooltip" title="Productos"></i>
+
+                        <span>Productos</span>
+                        <i class="fa-solid fa-caret-down float-end"></i>
+                    </a>
+                    <ul class="nav collapse submenu" id="submenuProductos">
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">
+                                <i class="bi bi-cart-plus" data-bs-toggle="tooltip" title="Crear Productos"></i>
+                                <span>Crear Productos</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">
+                                <i class="bi bi-coin" data-bs-toggle="tooltip" title="Crear Precios"></i>
+                                <span>Crear Precios</span>
+                            </a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">
+                                <i class="bi bi-bookmarks" data-bs-toggle="tooltip" title="Crear Ofertas"></i>
+                                <span>Crear Oferetas</span>
+                            </a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">
+                                <i class="bi bi-percent" data-bs-toggle="tooltip" title="Crear Descuentos"></i>
+                                <span>Crear Descuentos</span>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+
+                <li class="nav-item">
+                    <a onclick="cargarSeccion('personal.html')" class="nav-link" href="#" data-url="personal.html"><i class="fa-solid fa-file-circle-plus" data-bs-toggle="tooltip" title="Cotizacion"></i> <span>Agregar Cotización</span></a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#"><i class="fa-solid fa-file-invoice" data-bs-toggle="tooltip" title="Cotización"></i> <span>Ver Cotizaciones</span></a>
+                    <a onclick="cargarSeccion('usuarios.html')" class="nav-link" href="#" data-url="usuarios.html"><i class="fa-solid fa-file-invoice" data-bs-toggle="tooltip" title="Cotización"></i> <span>Ver Cotizaciones</span></a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#"><i class="fa-solid fa-calendar-check" data-bs-toggle="tooltip" title="Citas"></i> <span>Agendar Cita</span></a>
+                    <a onclick="cargarSeccion('ventas.html')" class="nav-link" href="#" data-url="ventas.html"> <i class="fa-solid fa-calendar-check" data-bs-toggle="tooltip" title="Citas"></i> <span>Agendar Cita</span></a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#"><i class="fa-solid fa-envelope"></i> <span>Mensajes</span></a>
+                    <a onclick="cargarSeccion('productos.html')" class="nav-link" href="#" data-url="productos.html"><i class="fa-solid fa-envelope"></i> <span>Mensajes</span></a>
                 </li>
             </ul>
         </nav>
 
         <!-- CONTENIDO -->
-        <div class="main-content">
+        <div class="main-content" id="mainContent">
             <div class="content-scroll">
                 <h3>Panel de Administración</h3>
                 <p>Desplázate para ver todo el contenido.</p>
@@ -286,10 +327,10 @@
             <nav class="mobile-show p-3">
                 <ul class="nav flex-column">
                     <li class="nav-item">
-                        <a class="nav-link" data-bs-toggle="collapse" href="#submenuMobile1" aria-expanded="false">
+                        <a class="nav-link" data-bs-toggle="collapse" href="#submenuMobileUsuarios" aria-expanded="false">
                             <i class="fa-solid fa-user"></i> <span>Usuarios</span> <i class="fa-solid fa-caret-down float-end"></i>
                         </a>
-                        <ul class="nav collapse submenu" id="submenuMobile1">
+                        <ul class="nav collapse submenu" id="submenuMobileUsuarios">
                             <li class="nav-item"><a class="nav-link" href="#"><i class="fa-solid fa-user-plus"></i> <span>Registrar</span></a></li>
                             <li class="nav-item"><a class="nav-link" href="#"><i class="fa-solid fa-users"></i> <span>Listar</span></a></li>
                         </ul>
@@ -336,6 +377,71 @@
             document.querySelectorAll('.submenu').forEach(el => el.classList.remove('show'));
             document.querySelectorAll('.nav-link.collapsed').forEach(link => link.setAttribute('aria-expanded', 'false'));
         });
+
+        // function cargarSeccion(archivo) {
+        //     fetch(archivo)
+        //         .then(respuesta => {
+        //             if (!respuesta.ok) throw new Error('Archivo no encontrado');
+        //             return respuesta.text();
+        //         })
+        //         .then(html => {
+        //             document.getElementById('mainContent').innerHTML = html;
+        //         })
+        //         .catch(error => {
+        //             document.getElementById('mainContent').innerHTML = `<p style="color:red;">Error: ${error.message}</p>`;
+        //         });
+        // }
+
+        function cargarSeccion(archivo) {
+            $('#mainContent').load(archivo);
+        }
+
+
+        // document.querySelectorAll('#sidebar .nav-link[data-url], .offcanvas .nav-link[data-url]')
+        //     .forEach(link => {
+        //         link.addEventListener('click', async e => {
+        //             e.preventDefault();
+        //             const url = link.dataset.url;
+        //             const main = document.getElementById('mainContent');
+
+        //             // Opcional: indicador de "cargando"
+        //             main.innerHTML = '<p>Cargando...</p>';
+
+        //             try {
+        //                 const resp = await fetch(url);
+        //                 if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
+        //                 const html = await resp.text();
+        //                 // Inyecta sólo el <body> interno, o todo el HTML si prefieres
+        //                 main.innerHTML = html;
+        //             } catch (err) {
+        //                 main.innerHTML = `<p class="text-danger">Error al cargar: ${err.message}</p>`;
+        //             }
+
+        //             // Actualiza estado "active" si quieres
+        //             document.querySelectorAll('#sidebar .nav-link, .offcanvas .nav-link')
+        //                 .forEach(l => l.classList.remove('active'));
+        //             link.classList.add('active');
+        //         });
+        //     });
+
+
+        // document.querySelectorAll('[data-url]').forEach(link => {
+        //     link.addEventListener('click', e => {
+        //         e.preventDefault();
+        //         const url = link.getAttribute('data-url');
+        //         fetch(url)
+        //             .then(response => {
+        //                 if (!response.ok) throw new Error('Error al cargar');
+        //                 return response.text();
+        //             })
+        //             .then(html => {
+        //                 document.getElementById('mainContent').innerHTML = html;
+        //             })
+        //             .catch(err => {
+        //                 alert('Error al cargar: ' + err.message);
+        //             });
+        //     });
+        // });
     </script>
 </body>
 
