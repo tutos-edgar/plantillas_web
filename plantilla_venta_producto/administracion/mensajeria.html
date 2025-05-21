@@ -1,0 +1,485 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Clon de Gmail</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Roboto', Arial, sans-serif;
+        }
+        
+        body {
+            display: flex;
+            height: 100vh;
+            background-color: #f5f5f5;
+        }
+        
+        /* Sidebar */
+        .sidebar {
+            width: 250px;
+            background-color: white;
+            padding: 15px;
+            border-right: 1px solid #e0e0e0;
+        }
+        
+        .compose-btn {
+            background-color: #c2e7ff;
+            color: #001d35;
+            border: none;
+            border-radius: 16px;
+            padding: 12px 24px;
+            font-size: 14px;
+            font-weight: 500;
+            margin-bottom: 16px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            width: 100%;
+        }
+        
+        .compose-btn:hover {
+            box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
+        }
+        
+        .sidebar-menu {
+            list-style: none;
+        }
+        
+        .sidebar-menu li {
+            padding: 8px 12px;
+            border-radius: 0 16px 16px 0;
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+        }
+        
+        .sidebar-menu li:hover {
+            background-color: #f1f3f4;
+        }
+        
+        .sidebar-menu li.active {
+            background-color: #d3e3fd;
+            font-weight: bold;
+        }
+        
+        .sidebar-menu li i {
+            margin-right: 12px;
+            color: #5f6368;
+        }
+        
+        /* Main Content */
+        .main-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        /* Header */
+        .header {
+            display: flex;
+            align-items: center;
+            padding: 8px 16px;
+            background-color: white;
+            border-bottom: 1px solid #e0e0e0;
+        }
+        
+        .search-bar {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            background-color: #f1f3f4;
+            border-radius: 8px;
+            padding: 8px 16px;
+            margin: 0 16px;
+        }
+        
+        .search-bar input {
+            border: none;
+            background: transparent;
+            outline: none;
+            width: 100%;
+            margin-left: 8px;
+        }
+        
+        /* Email List */
+        .email-list {
+            flex: 1;
+            overflow-y: auto;
+            background-color: white;
+        }
+        
+        .email-tabs {
+            display: flex;
+            border-bottom: 1px solid #e0e0e0;
+            padding: 0 16px;
+        }
+        
+        .email-tab {
+            padding: 12px 16px;
+            cursor: pointer;
+            position: relative;
+        }
+        
+        .email-tab.active {
+            color: #0b57d0;
+        }
+        
+        .email-tab.active::after {
+            content: '';
+            position: absolute;
+            bottom: -1px;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background-color: #0b57d0;
+        }
+        
+        .email-item {
+            display: flex;
+            align-items: center;
+            padding: 12px 16px;
+            border-bottom: 1px solid #e0e0e0;
+            cursor: pointer;
+        }
+        
+        .email-item:hover {
+            box-shadow: 0 1px 2px rgba(0,0,0,0.1);
+        }
+        
+        .email-item.unread {
+            font-weight: bold;
+            background-color: #f6f8fc;
+        }
+        
+        .email-checkbox {
+            margin-right: 16px;
+        }
+        
+        .email-star {
+            margin-right: 16px;
+            color: #e0e0e0;
+            cursor: pointer;
+        }
+        
+        .email-star.starred {
+            color: #f4b400;
+        }
+        
+        .email-sender {
+            width: 200px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+        
+        .email-content {
+            flex: 1;
+            display: flex;
+            overflow: hidden;
+        }
+        
+        .email-subject {
+            margin-right: 8px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+        
+        .email-preview {
+            color: #5f6368;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+        
+        .email-time {
+            width: 80px;
+            text-align: right;
+            color: #5f6368;
+        }
+        
+        .email-actions {
+            display: none;
+            margin-left: 16px;
+        }
+        
+        .email-item:hover .email-actions {
+            display: flex;
+        }
+        
+        .email-actions button {
+            background: none;
+            border: none;
+            cursor: pointer;
+            color: #5f6368;
+            margin-left: 8px;
+        }
+        
+        /* Email View */
+        .email-view {
+            display: none;
+            padding: 16px;
+            background-color: white;
+            border-left: 1px solid #e0e0e0;
+            width: 600px;
+            overflow-y: auto;
+        }
+        
+        .email-view-header {
+            margin-bottom: 16px;
+        }
+        
+        .email-view-subject {
+            font-size: 20px;
+            margin: 16px 0;
+        }
+        
+        .email-view-from {
+            display: flex;
+            align-items: center;
+            margin-bottom: 16px;
+        }
+        
+        .email-view-sender {
+            font-weight: bold;
+            margin-right: 8px;
+        }
+        
+        .email-view-date {
+            color: #5f6368;
+            margin-left: auto;
+        }
+        
+        .email-view-body {
+            line-height: 1.6;
+        }
+        
+        .email-view-actions {
+            margin-top: 16px;
+        }
+        
+        .email-view-actions button {
+            background: none;
+            border: none;
+            cursor: pointer;
+            color: #5f6368;
+            margin-right: 16px;
+            padding: 8px;
+        }
+    </style>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <button class="compose-btn">
+            <span class="material-icons">edit</span>
+            <span>Redactar</span>
+        </button>
+        
+        <ul class="sidebar-menu">
+            <li class="active">
+                <span class="material-icons">inbox</span>
+                <span>Recibidos</span>
+            </li>
+            <li>
+                <span class="material-icons">star</span>
+                <span>Destacados</span>
+            </li>
+            <li>
+                <span class="material-icons">schedule</span>
+                <span>Pospuestos</span>
+            </li>
+            <li>
+                <span class="material-icons">send</span>
+                <span>Enviados</span>
+            </li>
+            <li>
+                <span class="material-icons">delete</span>
+                <span>Papelera</span>
+            </li>
+        </ul>
+    </div>
+    
+    <!-- Main Content -->
+    <div class="main-content">
+        <!-- Header -->
+        <div class="header">
+            <span class="material-icons">menu</span>
+            <div class="search-bar">
+                <span class="material-icons">search</span>
+                <input type="text" placeholder="Buscar en correos">
+            </div>
+            <span class="material-icons">apps</span>
+            <span class="material-icons">settings</span>
+            <span class="material-icons">account_circle</span>
+        </div>
+        
+        <!-- Email List -->
+        <div class="email-list">
+            <div class="email-tabs">
+                <div class="email-tab active">
+                    <span class="material-icons">inbox</span>
+                    <span>Principal</span>
+                </div>
+                <div class="email-tab">
+                    <span class="material-icons">local_offer</span>
+                    <span>Promociones</span>
+                </div>
+                <div class="email-tab">
+                    <span class="material-icons">people</span>
+                    <span>Social</span>
+                </div>
+            </div>
+            
+            <!-- Email Items -->
+            <div class="email-item unread">
+                <div class="email-checkbox">
+                    <input type="checkbox">
+                </div>
+                <div class="email-star starred">
+                    <span class="material-icons">star</span>
+                </div>
+                <div class="email-sender">Juan Pérez</div>
+                <div class="email-content">
+                    <div class="email-subject">Reunión importante</div>
+                    <div class="email-preview">- Hola, te escribo para confirmar la reunión de mañana a las 10am en...</div>
+                </div>
+                <div class="email-time">10:30</div>
+                <div class="email-actions">
+                    <button title="Archivar"><span class="material-icons">archive</span></button>
+                    <button title="Eliminar"><span class="material-icons">delete</span></button>
+                    <button title="Marcar como leído"><span class="material-icons">mark_email_read</span></button>
+                </div>
+            </div>
+            
+            <div class="email-item">
+                <div class="email-checkbox">
+                    <input type="checkbox">
+                </div>
+                <div class="email-star">
+                    <span class="material-icons">star_border</span>
+                </div>
+                <div class="email-sender">Amazon</div>
+                <div class="email-content">
+                    <div class="email-subject">Tu pedido ha sido enviado</div>
+                    <div class="email-preview">- Tu pedido #12345 ha sido enviado y llegará el...</div>
+                </div>
+                <div class="email-time">Ayer</div>
+                <div class="email-actions">
+                    <button title="Archivar"><span class="material-icons">archive</span></button>
+                    <button title="Eliminar"><span class="material-icons">delete</span></button>
+                    <button title="Marcar como no leído"><span class="material-icons">mark_email_unread</span></button>
+                </div>
+            </div>
+            
+            <div class="email-item">
+                <div class="email-checkbox">
+                    <input type="checkbox">
+                </div>
+                <div class="email-star">
+                    <span class="material-icons">star_border</span>
+                </div>
+                <div class="email-sender">LinkedIn</div>
+                <div class="email-content">
+                    <div class="email-subject">Tienes 3 nuevas conexiones</div>
+                    <div class="email-preview">- María González, Carlos Ruiz y otros 1 se han conectado contigo...</div>
+                </div>
+                <div class="email-time">Mar 15</div>
+                <div class="email-actions">
+                    <button title="Archivar"><span class="material-icons">archive</span></button>
+                    <button title="Eliminar"><span class="material-icons">delete</span></button>
+                    <button title="Marcar como no leído"><span class="material-icons">mark_email_unread</span></button>
+                </div>
+            </div>
+            
+            <div class="email-item">
+                <div class="email-checkbox">
+                    <input type="checkbox">
+                </div>
+                <div class="email-star">
+                    <span class="material-icons">star_border</span>
+                </div>
+                <div class="email-sender">Soporte Técnico</div>
+                <div class="email-content">
+                    <div class="email-subject">Ticket #45678 resuelto</div>
+                    <div class="email-preview">- Hemos resuelto tu incidencia con el sistema de facturación...</div>
+                </div>
+                <div class="email-time">Mar 14</div>
+                <div class="email-actions">
+                    <button title="Archivar"><span class="material-icons">archive</span></button>
+                    <button title="Eliminar"><span class="material-icons">delete</span></button>
+                    <button title="Marcar como no leído"><span class="material-icons">mark_email_unread</span></button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Email View (hidden by default) -->
+    <div class="email-view">
+        <div class="email-view-header">
+            <button onclick="closeEmailView()"><span class="material-icons">close</span></button>
+        </div>
+        
+        <h2 class="email-view-subject">Reunión importante</h2>
+        
+        <div class="email-view-from">
+            <div class="email-view-sender">Juan Pérez</div>
+            <div class="email-view-to">a mí</div>
+            <div class="email-view-date">10:30 (hace 2 horas)</div>
+        </div>
+        
+        <div class="email-view-body">
+            <p>Hola,</p>
+            <p>Te escribo para confirmar la reunión de mañana a las 10am en nuestras oficinas centrales.</p>
+            <p>Por favor trae los documentos que hablamos la última vez y cualquier actualización sobre el proyecto.</p>
+            <p>Saludos,</p>
+            <p>Juan</p>
+        </div>
+        
+        <div class="email-view-actions">
+            <button><span class="material-icons">reply</span> Responder</button>
+            <button><span class="material-icons">reply_all</span> Responder a todos</button>
+            <button><span class="material-icons">forward</span> Reenviar</button>
+            <button><span class="material-icons">delete</span> Eliminar</button>
+        </div>
+    </div>
+    
+    <script>
+        // Función para mostrar la vista de email (simulación)
+        function showEmailView() {
+            document.querySelector('.email-view').style.display = 'block';
+        }
+        
+        // Función para cerrar la vista de email
+        function closeEmailView() {
+            document.querySelector('.email-view').style.display = 'none';
+        }
+        
+        // Simular clic en un email para mostrar la vista
+        document.querySelectorAll('.email-item').forEach(item => {
+            item.addEventListener('click', showEmailView);
+        });
+        
+        // Alternar estrellas en los emails
+        document.querySelectorAll('.email-star').forEach(star => {
+            star.addEventListener('click', function(e) {
+                e.stopPropagation();
+                const icon = this.querySelector('.material-icons');
+                if (icon.textContent === 'star_border') {
+                    icon.textContent = 'star';
+                    this.classList.add('starred');
+                } else {
+                    icon.textContent = 'star_border';
+                    this.classList.remove('starred');
+                }
+            });
+        });
+    </script>
+</body>
+</html>
