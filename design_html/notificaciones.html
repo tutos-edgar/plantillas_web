@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Notificaciones</title>
+  <!-- Bootstrap -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <!-- Bootstrap Icons -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
+  <style>
+    body {
+      background-color: #f8f9fa;
+    }
+    .notifications-container {
+      max-width: 900px;
+      margin: 40px auto;
+    }
+    .notification-card {
+      border-radius: 12px;
+      padding: 15px;
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      background: #fff;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+      transition: all 0.2s ease-in-out;
+      cursor: pointer;
+    }
+
+    .notification-card:hover {
+      transform: scale(1.01);
+    }
+    
+    .notification-card:hover {
+      transform: translateX(4px);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    }
+    .notification-icon {
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.5rem;
+      margin-right: 15px;
+    }
+    .notification-text {
+      flex: 1;
+    }
+    .notification-time {
+      font-size: 0.8rem;
+      color: gray;
+    }
+    .section-title {
+      font-weight: bold;
+      margin: 25px 0 10px;
+      font-size: 1.2rem;
+      color: #333;
+    }
+    .search-box {
+      margin-bottom: 20px;
+    }
+    .seen {
+      opacity: 0.6;
+    }
+  </style>
+</head>
+<body>
+
+<div class="container notifications-container">
+  <h2 class="mb-4 text-center"><i class="bi bi-bell-fill text-danger"></i> Notificaciones</h2>
+
+  <!-- Buscador -->
+  <div class="input-group search-box">
+    <span class="input-group-text"><i class="bi bi-search"></i></span>
+    <input type="text" id="searchInput" class="form-control" placeholder="Buscar notificaciones...">
+  </div>
+
+  <!-- Nuevas Notificaciones -->
+  <div>
+    <div class="section-title"><i class="bi bi-stars text-primary"></i> Nuevas</div>
+
+    <div class="notification-card" data-text="Nuevo seguidor Juan Pérez">
+      <div class="notification-icon bg-primary text-white">
+        <i class="bi bi-person-fill"></i>
+      </div>
+      <div class="notification-text">
+        <strong>Nuevo seguidor</strong> — Juan Pérez empezó a seguirte.
+        <div class="notification-time">Hace 5 minutos</div>
+      </div>
+      <button class="btn btn-sm btn-outline-secondary"><i class="bi bi-x"></i></button>
+    </div>
+
+    <div class="notification-card" data-text="Tu perfil fue actualizado correctamente">
+      <div class="notification-icon bg-success text-white">
+        <i class="bi bi-check-circle-fill"></i>
+      </div>
+      <div class="notification-text">
+        Tu perfil fue actualizado correctamente.
+        <div class="notification-time">Hace 1 hora</div>
+      </div>
+      <button class="btn btn-sm btn-outline-secondary"><i class="bi bi-x"></i></button>
+    </div>
+    
+  </div>
+
+  <!-- Notificaciones Vistas -->
+  <div>
+    <div class="section-title"><i class="bi bi-eye text-secondary"></i> Vistas</div>
+
+    <div class="notification-card seen" data-text="Recuerda verificar tu correo electrónico">
+      <div class="notification-icon bg-warning text-dark">
+        <i class="bi bi-exclamation-triangle-fill"></i>
+      </div>
+      <div class="notification-text">
+        Recuerda verificar tu correo electrónico.
+        <div class="notification-time">Ayer</div>
+      </div>
+      <button class="btn btn-sm btn-outline-secondary"><i class="bi bi-x"></i></button>
+    </div>
+
+    <div class="notification-card seen" data-text="Has completado tu primera tarea">
+      <div class="notification-icon bg-info text-white">
+        <i class="bi bi-clipboard-check-fill"></i>
+      </div>
+      <div class="notification-text">
+        Has completado tu primera tarea.
+        <div class="notification-time">Hace 3 días</div>
+      </div>
+      <button class="btn btn-sm btn-outline-secondary"><i class="bi bi-x"></i></button>
+    </div>
+
+
+    <!-- Tarjeta de notificación -->
+<div class="notification-card d-flex align-items-center p-2 border rounded mb-2" 
+     data-text="Nuevo seguidor Juan Pérez" 
+     style="cursor:pointer;">
+
+  <!-- Icono -->
+  <div class="notification-icon bg-primary text-white rounded-circle d-flex align-items-center justify-content-center me-2" style="width:40px; height:40px;">
+    <i class="bi bi-person-fill"></i>
+  </div>
+
+  <!-- Texto -->
+  <div class="notification-text flex-grow-1">
+    <strong>Nuevo seguidor</strong> — Juan Pérez empezó a seguirte.
+    <div class="notification-time text-muted small">Hace 5 minutos</div>
+  </div>
+
+  <!-- Botón cerrar -->
+  <button class="btn btn-sm btn-outline-secondary close-btn">
+    <i class="bi bi-x"></i>
+  </button>
+</div>
+
+  </div>
+</div>
+
+<!-- Bootstrap JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+
+  // Click en toda la tarjeta (menos el botón)
+document.querySelectorAll(".notification-card").forEach(card => {
+  card.addEventListener("click", function (e) {
+    if (!e.target.closest(".close-btn")) {
+      alert("Abrir detalle de notificación: " + this.dataset.text);
+    }
+  });
+});
+
+// Click en el botón X
+document.querySelectorAll(".notification-card .close-btn").forEach(btn => {
+  btn.addEventListener("click", function (e) {
+    e.stopPropagation(); // evita que se dispare el click de la tarjeta
+    this.closest(".notification-card").remove();
+  });
+});
+
+
+  // Filtro de búsqueda
+  const searchInput = document.getElementById('searchInput');
+  searchInput.addEventListener('keyup', function () {
+    const filter = this.value.toLowerCase();
+    const notifications = document.querySelectorAll('.notification-card');
+    notifications.forEach(card => {
+      const text = card.getAttribute('data-text').toLowerCase();
+      card.style.display = text.includes(filter) ? 'flex' : 'none';
+    });
+  });
+</script>
+</body>
+</html>

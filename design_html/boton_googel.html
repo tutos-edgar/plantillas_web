@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Detectar suscripción</title>
+</head>
+
+<body>
+    <button id="loginButton">Iniciar sesión con Google</button>
+    <p id="status"></p>
+
+    <script>
+        const CLIENT_ID = 'TU_CLIENT_ID_AQUI';
+        const API_KEY = 'TU_API_KEY_AQUI';
+        const CHANNEL_ID = 'TU_CANAL_ID_AQUI'; // El canal que quieres revisar
+
+        function handleClientLoad() {
+            gapi.load('client:auth2', initClient);
+        }
+
+        function initClient() {
+            gapi.client.init({
+                apiKey: API_KEY,
+                clientId: CLIENT_ID,
+                discoveryDocs: ["https://www.googleapis.com/discovery/v1/apis/youtube/v3/rest"],
+                scope: "https://www.googleapis.com/auth/youtube.readonly"
+            }).then(() => {
+                document.getElementById('loginButton').onclick = () => {
+                    gapi.auth2.getAuthInstance().signIn().then(checkSubscription);
+                };
+            });
+        }
+
+        function checkSubscription() {
+            gapi.client.youtube.subscriptions.list({
+                part: 'snippet',
+                mine: true,
+                maxResults: 50
+            }).then(response => {
+                const subscriptions = response.result.items;
+                const isSubscribed = subscriptions.some(sub => sub.snippet.resourceId.channelId === CHANNEL_ID);
+                if (isSubscribed) {
+                    document.getElementById('status').textContent = "¡Estás suscrito a mi canal!";
+                } else {
+                    document.getElementById('status').textContent = "No estás suscrito a mi canal.";
+                }
+            });
+        }
+
+        // Cargar la librería
+        handleClientLoad();
+    </script>
+</body>
+
+</html>

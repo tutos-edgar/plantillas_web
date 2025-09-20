@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard</title>
+    <!-- Bootstrap -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Iconos -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
+
+    <!-- DataTables -->
+    <link href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css" rel="stylesheet">
+
+    <link href="../../css/estyle_dashboard.css" rel="stylesheet">
+
+    <style>
+        .card-custom {
+            background-color: #dc3545;
+            /* Rojo Bootstrap */
+            color: white;
+            border-radius: 12px;
+            padding: 15px;
+            margin-bottom: 20px;
+        }
+        
+        .dataTables_wrapper .dataTables_paginate .paginate_button {
+            background-color: #dc3545 !important;
+            color: white !important;
+            /* border-radius: 50% !important; */
+            margin: 0 3px;
+            padding: 5px 10px;
+            border: none !important;
+        }
+        
+        .dataTables_wrapper .dataTables_paginate .paginate_button.current {
+            background-color: #2ab06d !important;
+        }
+        
+        .dataTables_wrapper .dataTables_paginate .paginate_button.current:hover {
+            background-color: #d39692 !important;
+        }
+        
+        .dataTables_wrapper .dataTables_filter input {
+            border-radius: 20px;
+            padding: 5px 10px;
+            border: 1px solid #dc3545;
+        }
+        
+        .dataTables_wrapper .dataTables_length select {
+            border-radius: 10px;
+            border: 1px solid #dc3545;
+            padding: 5px;
+        }
+        
+        table.dataTable {
+            border-radius: 12px;
+            overflow: hidden;
+            background-color: white;
+        }
+        
+        .table-container {
+            overflow-x: auto;
+            padding: 10px;
+            background: white;
+            /* border-radius: 12px; */
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+        
+        .subscriber-count {
+            font-weight: bold;
+            color: #dc3545;
+        }
+        
+        .dataTables_wrapper .dataTables_length select:focus {
+            outline: none;
+            border-color: var(--primary-color) !important;
+            box-shadow: 0 0 0 0.2rem rgba(228, 14, 6, 0.25) !important;
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Sidebar -->
+    <div class="sidebar" id="sidebar">
+        <div class="text-center py-4" id="logoSection">
+            <!-- <i class="bi bi-speedometer2 fs-2"></i> -->
+            <img src="https://upload.wikimedia.org/wikipedia/commons/e/e1/Logo_of_YouTube_%282015-2017%29.svg" alt="Logo View Youtube" class="img-fluid" style="width:80px; height:auto;">
+            <h5 class="mt-2" id="title_dash">View Youtube</h5>
+        </div>
+
+        <a href="#" class="active"><i class="bi bi-house-door"></i> <span>Inicio</span></a>
+        <a href="#"><i class="bi bi-play-btn"></i> <span>Generar Vistas</span></a>
+        <a href="#"><i class="bi bi-broadcast"></i> <span>Canales</span></a>
+        <a href="#"><i class="bi bi-camera-reels"></i> <span>Videos</span></a>
+        <a href="#"><i class="bi bi-calendar-check"></i> <span>Citas</span></a>
+        <a href="#"><i class="bi bi-graph-up"></i> <span>Reportes</span></a>
+        <a href="#"><i class="bi bi-gear"></i> <span>Configuración</span></a>
+        <a href="#"><i class="bi bi-box-arrow-right"></i> <span>Cerrar sesión</span></a>
+
+        <ul class="submenu">
+            <li><a href="#">Agregar Usuario</a></li>
+            <li><a href="#">Lista de Usuarios</a></li>
+            <li>
+                <a href="#" class="has-submenu">Más Opciones <i class="bi bi-chevron-down float-end"></i></a>
+                <ul class="submenu">
+                    <li><a href="#">Opciones 1</a></li>
+                    <li><a href="#">Opciones 2</a></li>
+                </ul>
+            </li>
+        </ul>
+
+    </div>
+
+    <!-- Contenido -->
+    <div class="content" id="content">
+        <!-- Header -->
+        <div class="header">
+            <button class="btn btn-outline-dark custom-btn" id="toggleBtn"><i class="bi bi-list"></i></button>
+            <h1>Bienvenido</h1>
+            <div class="icons">
+                <i class="bi bi-bell fs-5" data-bs-toggle="tooltip" data-bs-placement="top" title="Notificaciones"></i>
+                <i class="bi bi-person-circle fs-5" data-bs-toggle="tooltip" data-bs-placement="top" title="Perfil"></i>
+            </div>
+        </div>
+
+
+
+        <div class="content-center" id="content-center">
+            <!-- Dashboard Content -->
+            <div class="container-fluid mt-4">
+
+                <!-- Card con ComboBox -->
+                <div class="card p-3 shadow-sm card-custom-title">
+                    <div class="row align-items-center">
+                        <!-- Título -->
+                        <div class="col-12 col-md-8 text-center text-md-start mb-2 mb-md-0 ">
+                            <h3 class="m-0">LISTA DE CANALES</h3>
+                        </div>
+
+                        <!-- ComboBox -->
+                        <!-- <div class="col-12 col-md-4 text-center text-md-end ">
+                        <select id="filterType" class="form-select w-100 w-md-auto">
+                            <option value="">Mostrar todos</option>
+                            <option value="Video">Videos</option>
+                            <option value="Short">Shorts</option>
+                        </select>
+                        </div> -->
+                    </div>
+                </div>
+
+                <!-- Card de la tabla -->
+                <div class="card shadow-lg p-4">
+                    <div class="table-responsive">
+                        <table id="videosTable" class="table table-striped table-hover align-middle text-center ">
+                            <thead class="table-danger ">
+                                <tr>
+                                    <th>#</th>
+                                    <th>Título</th>
+                                    <th>Tipo</th>
+                                    <th>Descripción</th>
+                                    <th>URL</th>
+                                    <th>Duración</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>1</td>
+                                    <td><b>Tutorial de Java</b></td>
+                                    <td>Video</td>
+                                    <td>Curso básico de Java</td>
+                                    <td><a href="https://youtube.com" target="_blank" class="btn btn-sm btn-outline-primary">Ver</a></td>
+                                    <td>00:12:30</td>
+                                </tr>
+                                <tr>
+                                    <td>2</td>
+                                    <td><b>Consejo rápido</b></td>
+                                    <td>Short</td>
+                                    <td>Tip de productividad</td>
+                                    <td><a href="https://youtube.com" target="_blank" class="btn btn-sm btn-outline-success">Ver</a></td>
+                                    <td>00:00:45</td>
+                                </tr>
+                                <tr>
+                                    <td>3</td>
+                                    <td><b>Programación Avanzada</b></td>
+                                    <td>Video</td>
+                                    <td>Técnicas modernas en JavaScript</td>
+                                    <td><a href="https://youtube.com" target="_blank" class="btn btn-sm btn-outline-primary">Ver</a></td>
+                                    <td>00:25:00</td>
+                                </tr>
+
+                                <tr>
+                                    <td>1</td>
+                                    <td><b>Tutorial de Java</b></td>
+                                    <td>Video</td>
+                                    <td>Curso básico de Java</td>
+                                    <td><a href="https://youtube.com" target="_blank" class="btn btn-sm btn-outline-primary">Ver</a></td>
+                                    <td>00:12:30</td>
+                                </tr>
+                                <tr>
+                                    <td>2</td>
+                                    <td><b>Consejo rápido</b></td>
+                                    <td>Short</td>
+                                    <td>Tip de productividad</td>
+                                    <td><a href="https://youtube.com" target="_blank" class="btn btn-sm btn-outline-success">Ver</a></td>
+                                    <td>00:00:45</td>
+                                </tr>
+                                <tr>
+                                    <td>3</td>
+                                    <td><b>Programación Avanzada</b></td>
+                                    <td>Video</td>
+                                    <td>Técnicas modernas en JavaScript</td>
+                                    <td><a href="https://youtube.com" target="_blank" class="btn btn-sm btn-outline-primary">Ver</a></td>
+                                    <td>00:25:00</td>
+                                </tr>
+
+                                <tr>
+                                    <td>1</td>
+                                    <td><b>Tutorial de Java</b></td>
+                                    <td>Video</td>
+                                    <td>Curso básico de Java</td>
+                                    <td><a href="https://youtube.com" target="_blank" class="btn btn-sm btn-outline-primary">Ver</a></td>
+                                    <td>00:12:30</td>
+                                </tr>
+                                <tr>
+                                    <td>2</td>
+                                    <td><b>Consejo rápido</b></td>
+                                    <td>Short</td>
+                                    <td>Tip de productividad</td>
+                                    <td><a href="https://youtube.com" target="_blank" class="btn btn-sm btn-outline-success">Ver</a></td>
+                                    <td>00:00:45</td>
+                                </tr>
+                                <tr>
+                                    <td>3</td>
+                                    <td><b>Programación Avanzada</b></td>
+                                    <td>Video</td>
+                                    <td>Técnicas modernas en JavaScript</td>
+                                    <td><a href="https://youtube.com" target="_blank" class="btn btn-sm btn-outline-primary">Ver</a></td>
+                                    <td>00:25:00</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+
+
+    </div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+    <script src="../js/funciones_dash.js">
+    </script>
+
+    <script>
+        $(document).ready(function() {
+            var table = $('#videosTable').DataTable({
+                responsive: true,
+                pageLength: 5,
+                lengthMenu: [5, 10, 25],
+                // language: {
+                //     search: "Buscar:",
+                //     lengthMenu: "Mostrar _MENU_ registros",
+                //     info: "Mostrando _START_ a _END_ de _TOTAL_ videos",
+                //     paginate: {
+                //         previous: "<<",
+                //         next: ">>"
+                //     }
+                // }
+                language: {
+                    url: "https://cdn.datatables.net/plug-ins/1.13.6/i18n/es-ES.json",
+                    paginate: {
+                        previous: "<<",
+                        next: ">>"
+                    }
+                }
+            });
+
+            // Filtro por tipo
+            $('#filterType').on('change', function() {
+                var val = $(this).val();
+                table.column(1).search(val).draw();
+            });
+        });
+    </script>
+</body>
+
+</html>

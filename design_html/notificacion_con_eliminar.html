@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Notificaciones</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
+  <style>
+    body {
+      background: #f5f7fa;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+    .notification-card {
+      transition: all 0.3s ease;
+      cursor: pointer;
+    }
+    .notification-card:hover {
+      background: #f0f2f5;
+      transform: scale(1.01);
+    }
+    .notification-card.unread {
+      border-left: 5px solid #0d6efd;
+      background: #eef5ff;
+    }
+    .search-bar {
+      border-radius: 20px;
+      padding: 10px 15px;
+    }
+    .delete-btn {
+      border: none;
+      background: transparent;
+      color: #dc3545;
+      font-size: 1.2rem;
+    }
+    .delete-btn:hover {
+      color: #a71d2a;
+    }
+  </style>
+</head>
+<body>
+  <div class="container py-4">
+    <h2 class="mb-4 text-center">📢 Notificaciones</h2>
+
+    <!-- Barra de búsqueda -->
+    <div class="row mb-4">
+      <div class="col-md-8 mx-auto">
+        <input type="text" id="searchInput" class="form-control search-bar" placeholder="Buscar notificaciones...">
+      </div>
+    </div>
+
+    <!-- Contenedor de notificaciones -->
+    <div id="notificationsContainer" class="list-group shadow-sm rounded"></div>
+  </div>
+
+  <script>
+    // Array dinámico de notificaciones
+    let notificaciones = [
+      { id: 1, titulo: "Nuevo mensaje", descripcion: "Tienes un nuevo mensaje en tu bandeja.", fecha: "2025-09-04 10:30", leida: false },
+      { id: 2, titulo: "Actualización del sistema", descripcion: "El sistema se actualizará esta noche a las 2 AM.", fecha: "2025-09-03 18:00", leida: true },
+      { id: 3, titulo: "Recordatorio de reunión", descripcion: "Reunión programada para mañana a las 9 AM.", fecha: "2025-09-02 14:45", leida: false },
+      { id: 4, titulo: "Oferta especial", descripcion: "Obtén un 20% de descuento en tu próxima compra.", fecha: "2025-09-01 12:10", leida: true }
+    ];
+
+    const container = document.getElementById("notificationsContainer");
+    const searchInput = document.getElementById("searchInput");
+
+    // Renderizar notificaciones
+    function renderNotifications(lista) {
+      container.innerHTML = "";
+      if (lista.length === 0) {
+        container.innerHTML = `<div class="text-center p-4 text-muted">No hay notificaciones.</div>`;
+        return;
+      }
+
+      lista.forEach(n => {
+        const card = document.createElement("div");
+        card.className = `list-group-item list-group-item-action notification-card d-flex justify-content-between align-items-start mb-2 ${n.leida ? "" : "unread"}`;
+        
+        card.innerHTML = `
+          <div>
+            <h6 class="mb-1 fw-bold">${n.titulo}</h6>
+            <p class="mb-1 small">${n.descripcion}</p>
+            <small class="text-muted">${n.fecha}</small>
+          </div>
+          <button class="delete-btn ms-3" onclick="deleteNotification(${n.id})">
+            <i class="bi bi-trash"></i>
+          </button>
+        `;
+
+        card.addEventListener("click", (e) => {
+          if (!e.target.closest("button")) {
+            markAsRead(n.id);
+          }
+        });
+
+        container.appendChild(card);
+      });
+    }
+
+    // Marcar como leída
+    function markAsRead(id) {
+      notificaciones = notificaciones.map(n => n.id === id ? { ...n, leida: true } : n);
+      renderNotifications(notificaciones);
+    }
+
+    // Eliminar notificación
+    function deleteNotification(id) {
+      notificaciones = notificaciones.filter(n => n.id !== id);
+      renderNotifications(notificaciones);
+    }
+
+    // Buscar notificación
+    searchInput.addEventListener("input", () => {
+      const term = searchInput.value.toLowerCase();
+      const filtradas = notificaciones.filter(n =>
+        n.titulo.toLowerCase().includes(term) ||
+        n.descripcion.toLowerCase().includes(term)
+      );
+      renderNotifications(filtradas);
+    });
+
+    // Inicializar
+    renderNotifications(notificaciones);
+  </script>
+</body>
+</html>

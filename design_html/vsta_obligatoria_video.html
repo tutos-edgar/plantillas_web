@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Modal con Video</title>
+    <!-- Bootstrap 5 -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        /* Forzar que el usuario no interactúe con la página mientras el modal está abierto */
+        
+        body.modal-open {
+            pointer-events: none;
+        }
+        
+        .modal-content {
+            pointer-events: auto;
+            /* pero sí puede interactuar dentro del modal */
+        }
+        /* Ocultar botón de cerrar dinámicamente */
+        
+        .close-btn-hidden {
+            display: none !important;
+        }
+        
+        iframe {
+            width: 100%;
+            height: 400px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Botón de prueba -->
+    <button class="btn btn-primary" onclick="abrirModal()">Abrir Video</button>
+
+
+    <iframe width="560" height="315" src="https://www.youtube.com/embed/H5pmQ-ly2xs?autoplay=1&mute=1" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+        allowfullscreen>
+</iframe>
+
+    <iframe width="560" height="315" src="https://www.youtube.com/watch?v=H5pmQ-ly2xs" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen>
+</iframe>
+
+    <!-- Modal -->
+    <div class="modal fade" id="videoModal" data-bs-backdrop="static" data-bs-keyboard="false">
+        <div class="modal-dialog modal-lg modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Video</h5>
+                    <button type="button" class="btn-close" id="btnCerrarModal" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+                </div>
+                <div class="modal-body p-0">
+                    <div id="player"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- YouTube Iframe API -->
+    <script src="https://www.youtube.com/iframe_api"></script>
+
+    <script>
+        let player;
+        let modal = new bootstrap.Modal(document.getElementById('videoModal'));
+        let btnCerrar = document.getElementById("btnCerrarModal");
+
+        // // Cargar el iframe de YouTube con la API
+        // function onYouTubeIframeAPIReady() {
+        //     player = new YT.Player('player', {
+        //         videoId: 'H5pmQ-ly2xs', // tu video
+        //         playerVars: {
+        //             controls: 1, // los controles se quitarán dinámicamente
+        //             autoplay: 0
+        //         },
+        //         events: {
+        //             'onStateChange': onPlayerStateChange,
+        //             'onError': onPlayerError
+        //         }
+        //     });
+        // }
+
+        // function abrirModal() {
+        //     modal.show();
+        // }
+
+        // function onPlayerStateChange(event) {
+        //     if (event.data === YT.PlayerState.PLAYING) {
+        //         console.log("▶️ El video comenzó");
+        //         // Ocultar la X
+        //         btnCerrar.classList.add("close-btn-hidden");
+        //         // Quitar controles
+        //         player.unloadModule("controls");
+        //     }
+        //     if (event.data === YT.PlayerState.ENDED) {
+        //         console.log("✅ El video terminó");
+        //         // Esperar 5 segundos y cerrar
+        //         setTimeout(() => {
+        //             if (document.getElementById("videoModal").classList.contains("show")) {
+        //                 modal.hide();
+        //             }
+        //         }, 5000);
+        //     }
+        // }
+
+        // function onPlayerError(event) {
+        //     console.error("❌ Error en el video:", event.data);
+        //     alert("Hubo un error al cargar el video");
+        //     modal.hide();
+        // }
+
+        // // Al cerrar el modal reinicia el video y vuelve a mostrar la X
+        // document.getElementById("videoModal").addEventListener("hidden.bs.modal", () => {
+        //     if (player && player.stopVideo) {
+        //         player.stopVideo();
+        //     }
+        //     btnCerrar.classList.remove("close-btn-hidden");
+        // });
+    </script>
+</body>
+
+</html>

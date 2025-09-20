@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Exportar Tabla de Videos</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css" rel="stylesheet">
+  <link href="https://cdn.datatables.net/buttons/2.4.1/css/buttons.dataTables.min.css" rel="stylesheet">
+  <style>
+    body { background-color: #f8f9fa; }
+    .card-custom { background-color: #dc3545; color: white; border-radius: 12px; padding: 15px; margin-bottom: 20px; }
+    .table-container { overflow-x: auto; background: white; border-radius: 12px; padding: 10px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
+    .dataTables_wrapper .dt-buttons button { margin-right: 5px; border-radius: 8px; background-color: #dc3545; color: white; }
+    .dataTables_wrapper .dt-buttons button:hover { background-color: #b02a37; color: white; }
+  </style>
+</head>
+<body class="p-4">
+
+<div class="container">
+  <div class="card-custom d-flex justify-content-between align-items-center">
+    <h3 class="m-0">Lista de Videos</h3>
+    <select id="filterType" class="form-select w-auto">
+      <option value="">Todos</option>
+      <option value="Video">Video</option>
+      <option value="Short">Short</option>
+    </select>
+  </div>
+
+  <div class="table-container">
+    <table id="videosTable" class="display nowrap" style="width:100%">
+      <thead>
+        <tr>
+          <th>Título</th>
+          <th>Tipo</th>
+          <th>Descripción</th>
+          <th>URL</th>
+          <th>Duración</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td>Video 1</td><td>Video</td><td>Descripción 1</td><td>https://youtu.be/1</td><td>10:30</td></tr>
+        <tr><td>Short 1</td><td>Short</td><td>Descripción 2</td><td>https://youtu.be/2</td><td>00:45</td></tr>
+        <tr><td>Video 2</td><td>Video</td><td>Descripción 3</td><td>https://youtu.be/3</td><td>08:12</td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- Scripts -->
+<script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
+<script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/buttons/2.4.1/js/dataTables.buttons.min.js"></script>
+<script src="https://cdn.datatables.net/buttons/2.4.1/js/buttons.html5.min.js"></script>
+<script src="https://cdn.datatables.net/buttons/2.4.1/js/buttons.print.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/pdfmake.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/vfs_fonts.js"></script>
+
+<script>
+  $(document).ready(function() {
+    var table = $('#videosTable').DataTable({
+      responsive: true,
+      pageLength: 5,
+      lengthMenu: [5,10,25],
+      dom: 'Bfltip', // Mostrar botones, filtro, tabla, info y paginación
+      buttons: [
+        { extend: 'copyHtml5', text: 'Copiar' },
+        { extend: 'excelHtml5', text: 'Excel' },
+        { extend: 'csvHtml5', text: 'CSV' },
+        { extend: 'pdfHtml5', text: 'PDF' },
+        { extend: 'print', text: 'Imprimir' }
+      ],
+      language: {
+        search: "Buscar:",
+        lengthMenu: "Mostrar _MENU_ registros",
+        info: "Mostrando _START_ a _END_ de _TOTAL_ videos",
+        paginate: { previous: "←", next: "→" }
+      }
+    });
+
+    // Filtrar por tipo
+    $('#filterType').on('change', function () {
+      var val = $(this).val();
+      table.column(1).search(val).draw();
+    });
+  });
+</script>
+
+</body>
+</html>

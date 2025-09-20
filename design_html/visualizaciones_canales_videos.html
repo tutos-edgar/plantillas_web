@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Generar Visualizaciones</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: #f8f9fa;
+        }
+        
+        .header-bar {
+            background-color: #dc3545;
+            color: white;
+            padding: 15px;
+            text-align: center;
+            font-size: 1.5rem;
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+        
+        .card-custom {
+            border-radius: 12px;
+            overflow: hidden;
+            transition: transform 0.2s, box-shadow 0.2s;
+            cursor: pointer;
+        }
+        
+        .card-custom:hover {
+            transform: scale(1.03);
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
+        }
+        
+        .card img {
+            height: 160px;
+            object-fit: cover;
+        }
+        
+        .views {
+            color: #dc3545;
+            font-weight: bold;
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Barra superior -->
+    <div class="header-bar">🎯 Generar Visualizaciones</div>
+
+    <div class="container">
+        <!-- ComboBox -->
+        <div class="mb-4">
+            <label class="form-label fw-bold">Seleccionar:</label>
+            <select id="selector" class="form-select w-auto">
+        <option value="canales">Canales</option>
+        <option value="videos">Videos</option>
+      </select>
+        </div>
+
+        <!-- Grid de Cards -->
+        <div class="row" id="cardsContainer">
+            <!-- Aquí se insertan dinámicamente -->
+        </div>
+    </div>
+
+    <!-- Paginación -->
+  <nav class="mt-4">
+    <ul id="paginacion" class="pagination justify-content-center"></ul>
+  </nav>
+
+    <script>
+        const container = document.getElementById("cardsContainer");
+        const selector = document.getElementById("selector");
+
+        // Datos simulados
+        const canales = Array.from({
+            length: 20
+        }, (_, i) => ({
+            nombre: `Canal ${i+1}`,
+            imagen: "https://picsum.photos/300/200?random=" + (i + 1),
+            titulo: `Título del canal ${i+1}`,
+            descripcion: "Descripción breve del canal.",
+            videos: Math.floor(Math.random() * 100) + 10,
+            vistas: Math.floor(Math.random() * 100000) + 1000
+        }));
+
+        const videos = Array.from({
+            length: 20
+        }, (_, i) => ({
+            titulo: `Video ${i+1}`,
+            imagen: "https://picsum.photos/300/200?random=" + (i + 30),
+            descripcion: "Descripción breve del video.",
+            duracion: `${Math.floor(Math.random()*15)+1}:${String(Math.floor(Math.random()*59)).padStart(2,"0")}`,
+            vistas: Math.floor(Math.random() * 50000) + 500
+        }));
+
+        // Renderizar cards
+        function renderCards(tipo) {
+            container.innerHTML = "";
+            const data = tipo === "canales" ? canales : videos;
+            data.forEach(item => {
+                let html = "";
+                if (tipo === "canales") {
+                    html = `
+            <div class="col-lg-3 col-md-4 col-sm-6 mb-4">
+              <div class="card card-custom" onclick="alert('Entrando a ${item.nombre}')">
+                <img src="${item.imagen}" class="card-img-top" alt="${item.nombre}">
+                <div class="card-body">
+                  <h5 class="card-title">${item.nombre}</h5>
+                  <p class="card-text">${item.descripcion}</p>
+                  <p class="mb-1">🎥 Videos: ${item.videos}</p>
+                  <p class="views">👁️ Vistas: ${item.vistas.toLocaleString()}</p>
+                </div>
+              </div>
+            </div>
+          `;
+                } else {
+                    html = `
+            <div class="col-lg-3 col-md-4 col-sm-6 mb-4">
+              <div class="card card-custom" onclick="alert('Reproduciendo ${item.titulo}')">
+                <img src="${item.imagen}" class="card-img-top" alt="${item.titulo}">
+                <div class="card-body">
+                  <h5 class="card-title">${item.titulo}</h5>
+                  <p class="card-text">${item.descripcion}</p>
+                  <p class="mb-1">⏱️ Duración: ${item.duracion}</p>
+                  <p class="views">👁️ Vistas: ${item.vistas.toLocaleString()}</p>
+                </div>
+              </div>
+            </div>
+          `;
+                }
+                container.innerHTML += html;
+            });
+        }
+
+        // Evento del selector
+        selector.addEventListener("change", (e) => {
+            renderCards(e.target.value);
+        });
+
+        // Cargar por defecto canales
+        renderCards("canales");
+    </script>
+
+</body>
+
+</html>
